@@ -26,7 +26,7 @@ function ciniki_sysadmin_users() {
 			appPrefix, 'medium', 'simplelist', 'ciniki.sysadmin.users');
 		this.loadData();
 
-		this.users.listValue = function(i, d) { return d['user']['firstname'] + ' ' + d['user']['lastname']; }
+		this.users.listValue = function(s, i, d) { return d['user']['firstname'] + ' ' + d['user']['lastname']; }
 		this.users.listFn = function(s, i, d) { return 'M.ciniki_sysadmin_users.showDetails(' + i + ');'; }
 		this.users.noData = function() { return 'ERROR - No sysadmins'; }
 		this.users.addButton('add', 'Add', 'M.startModalApp(\'ciniki.users.add\', null, \'M.ciniki_sysadmin_users.add(data);\');');

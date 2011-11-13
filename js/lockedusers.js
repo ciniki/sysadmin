@@ -26,7 +26,7 @@ function ciniki_sysadmin_lockedusers() {
             appPrefix, 'medium', 'simplelist', 'ciniki.sysadmin.privileged.users');
         this.loadData();
 		this.users.num_cols = 2;
-		this.users.listValue = function(i, d) { return d['user']['firstname'] + ' ' + d['user']['lastname']; }
+		this.users.listValue = function(s, i, d) { return d['user']['firstname'] + ' ' + d['user']['lastname']; }
         this.users.cellValue = function(i, col, d) { 
 			if( col == 0 ) { return d['user']['firstname'] + ' ' + d['user']['lastname']; }
 			else if( col == 1 ) {

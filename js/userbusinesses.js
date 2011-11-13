@@ -64,12 +64,12 @@ function ciniki_sysadmin_userbusinesses() {
 				}},
 			};
 		this.details.user_id = 0;
-		this.details.listLabel = function(i, d) {
+		this.details.listLabel = function(s, i, d) {
 			if( d['label'] != null ) {
 				return d['label'];
 			}
 		};
-		this.details.listValue = function(i, d) { 
+		this.details.listValue = function(s, i, d) { 
 			if( d['value'] != null ) {
 				return d['value'];
 			}
