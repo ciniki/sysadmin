@@ -23,7 +23,9 @@ function ciniki_sysadmin_users() {
 		//
 		this.users = new M.panel('Sys Admins',
 			'ciniki_sysadmin_users', 'users',
-			appPrefix, 'medium', 'simplelist', 'ciniki.sysadmin.users');
+			appPrefix, 'medium', 'sectioned', 'ciniki.sysadmin.users');
+		this.users.sections = {'_':{'label':'', 'list':{}}};
+		this.users.sectionData = function(s) { return this.data; }
 		this.loadData();
 
 		this.users.listValue = function(s, i, d) { return d['user']['firstname'] + ' ' + d['user']['lastname']; }
@@ -37,9 +39,9 @@ function ciniki_sysadmin_users() {
         //  
         this.details = new M.panel('Sys Admin',
             'ciniki_sysadmin_users', 'details',
-            appPrefix, 'medium', 'sectionedform', 'ciniki.sysadmin.users.details');
+            appPrefix, 'medium', 'sectioned', 'ciniki.sysadmin.users.details');
         this.details.data = null;
-        this.details.form = {'':{'label':'', 'fields':{
+        this.details.sections = {'':{'label':'', 'fields':{
             'email':{'label':'Email', 'type':'noedit'},
             'firstname':{'label':'First', 'type':'noedit'},
             'lastname':{'label':'Last', 'type':'noedit'},

@@ -22,29 +22,26 @@ function ciniki_sysadmin_dbversions() {
 		//
 		this.tables = new M.panel('Table Versions',
 			'ciniki_sysadmin_dbversions', 'tables',
-			appPrefix, 'medium', 'simplegrid', 'ciniki.sysadmin.db_table_versions');
+			appPrefix, 'medium', 'sectioned', 'ciniki.sysadmin.db_table_versions');
+		this.tables.sections = {
+			'_':{'label':'', 'type':'simplegrid', 'num_cols':3, 
+				'headerValues':['Table', 'Database', 'Current'],
+				},
+			};
+		this.tables.sectionData = function(s) { return this.data; }
 		
 		//
 		// Load the data into the this.tables.data field
 		//
 		this.loadData();
-		this.tables.num_cols = 3;
-		this.tables.headerValue = function(col) {
-			switch(col) {
-				case 0: return 'Table';
-				case 1: return 'Database';
-				case 2: return 'Current';
-			}
-			return '';
-		}
-		this.tables.cellClass = function(i, col, data_element) {
+		this.tables.cellClass = function(s, i, j, data_element) {
 			if( this.data[i]['database_version'] != this.data[i]['schema_version'] ) {
 				return 'alert';
 			}
 			return null;
 		}
-		this.tables.cellValue = function(i, col, data_element) {
-			switch(col) {
+		this.tables.cellValue = function(s, i, j, d) {
+			switch(j) {
 				case 0: return i;
 				case 1: return this.data[i]['database_version'];
 				case 2: return this.data[i]['schema_version'];

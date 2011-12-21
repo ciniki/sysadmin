@@ -23,11 +23,15 @@ function ciniki_sysadmin_lockedusers() {
         //  
         this.users = new M.panel('Locked Users',
             'ciniki_sysadmin_lockedusers', 'users',
-            appPrefix, 'medium', 'simplelist', 'ciniki.sysadmin.privileged.users');
+            appPrefix, 'medium', 'sectioned', 'ciniki.sysadmin.privileged.users');
+		this.users.sections = {
+			'_':{'label':'', 'type':'simplegrid', 'num_cols':2, 
+				'headerValues':['Name', 'Privileges'],
+				},
+			};
+		this.users.sectionData = function(s) { return this.data; }
         this.loadData();
-		this.users.num_cols = 2;
-		this.users.listValue = function(s, i, d) { return d['user']['firstname'] + ' ' + d['user']['lastname']; }
-        this.users.cellValue = function(i, col, d) { 
+        this.users.cellValue = function(s, i, col, d) { 
 			if( col == 0 ) { return d['user']['firstname'] + ' ' + d['user']['lastname']; }
 			else if( col == 1 ) {
 				var u = this.data[i]['user'];
@@ -40,8 +44,7 @@ function ciniki_sysadmin_lockedusers() {
 			}
 			return '';
 		}
-        this.users.listFn = function(s, i, d) { return 'M.ciniki_sysadmin_lockedusers.showDetails(' + i + ');'; }
-        this.users.rowFn = function(i, d) { return 'M.ciniki_sysadmin_lockedusers.showDetails(' + i + ');'; }
+        this.users.rowFn = function(s, i, d) { return 'M.ciniki_sysadmin_lockedusers.showDetails(' + i + ');'; }
         this.users.noData = function() { return 'No locked users'; }
         this.users.addClose('Back');
 
@@ -50,9 +53,9 @@ function ciniki_sysadmin_lockedusers() {
         //  
         this.details = new M.panel('Locked User',
             'ciniki_sysadmin_lockedusers', 'details',
-            appPrefix, 'medium', 'sectionedform', 'ciniki.sysadmin.users.details');
+            appPrefix, 'medium', 'sectioned', 'ciniki.sysadmin.users.details');
         this.details.data = null;
-        this.details.form = {'':{'label':'', 'fields':{
+        this.details.sections = {'':{'label':'', 'fields':{
             'email':{'label':'Email', 'type':'noedit'},
             'firstname':{'label':'First', 'type':'noedit'},
             'lastname':{'label':'Last', 'type':'noedit'},

@@ -23,10 +23,15 @@ function ciniki_sysadmin_userbusinesses() {
         //  
         this.users = new M.panel('Business Users',
             'ciniki_sysadmin_userbusinesses', 'users',
-            appPrefix, 'medium', 'simplegrid', 'ciniki.sysadmin.users.businesses');
+            appPrefix, 'medium', 'sectioned', 'ciniki.sysadmin.users.businesses');
+		this.users.sections = {
+			'_':{'label':'', 'type':'simplegrid', 'num_cols':2, 
+				'headerValues':['Name', 'Privileges'],
+				},
+			};
+		this.users.sectionData = function(s) { return this.data; }
         this.loadData();
-		this.users.num_cols = 2;
-        this.users.cellValue = function(i, col, d) { 
+        this.users.cellValue = function(s, i, col, d) { 
 			if( col == 0 ) { return this.data[i]['user']['firstname'] + ' ' + this.data[i]['user']['lastname']; }
 			else if( col == 1 ) {
 				var u = this.data[i]['user'];
@@ -40,7 +45,7 @@ function ciniki_sysadmin_userbusinesses() {
 			}
 			return '';
 		}
-        this.users.rowFn = function(i, d) { return 'M.ciniki_sysadmin_userbusinesses.showDetails(' + i + ');'; }
+        this.users.rowFn = function(s, i, d) { return 'M.ciniki_sysadmin_userbusinesses.showDetails(' + i + ');'; }
         this.users.noData = function() { return 'ERROR - users'; }
         this.users.addClose('Back');
 
@@ -49,8 +54,8 @@ function ciniki_sysadmin_userbusinesses() {
         //  
         this.details = new M.panel('Business Users',
             'ciniki_sysadmin_userbusinesses', 'details',
-            appPrefix, 'medium', 'sectionedlist', 'ciniki.sysadmin.users.businesses.details');
-		this.details.data = {
+            appPrefix, 'medium', 'sectioned', 'ciniki.sysadmin.users.businesses.details');
+		this.details.sections = {
 			'info':{'label':'', 'list':{
 				'firstname':{'label':'Firstname', 'value':''},
 				'lastname':{'label':'Lastname', 'value':''},
@@ -80,8 +85,8 @@ function ciniki_sysadmin_userbusinesses() {
 			} 
 			return '';
 		};
-		this.details.sectionLabel = function(i, d) { return d['label']; }
-		this.details.sectionList = function(i, d) { return d['list']; }
+//		this.details.sectionLabel = function(i, d) { return d['label']; }
+//		this.details.sectionList = function(i, d) { return d['list']; }
 	
 		this.details.noData = function(i) { return 'No user found'; }
 
@@ -104,14 +109,14 @@ function ciniki_sysadmin_userbusinesses() {
 		// Setup the data for the details form
 		//
 		var businesses = this.users.data[uNUM]['user']['businesses'];
-		this.details.data['businesses']['list'] = {};
+		this.details.sections['businesses']['list'] = {};
 		this.details.user_id = this.users.data[uNUM]['user']['id'];
-		this.details.data['info']['list']['email']['value'] = this.users.data[uNUM]['user']['email'];
-		this.details.data['info']['list']['firstname']['value'] = this.users.data[uNUM]['user']['firstname'];
-		this.details.data['info']['list']['lastname']['value'] = this.users.data[uNUM]['user']['lastname'];
-		this.details.data['info']['list']['display_name']['value'] = this.users.data[uNUM]['user']['display_name'];
+		this.details.sections['info']['list']['email']['value'] = this.users.data[uNUM]['user']['email'];
+		this.details.sections['info']['list']['firstname']['value'] = this.users.data[uNUM]['user']['firstname'];
+		this.details.sections['info']['list']['lastname']['value'] = this.users.data[uNUM]['user']['lastname'];
+		this.details.sections['info']['list']['display_name']['value'] = this.users.data[uNUM]['user']['display_name'];
 		for(i in businesses ) {
-			this.details.data['businesses']['list'][i] = {'label':'', 'value':businesses[i]['business']['name']};
+			this.details.sections['businesses']['list'][i] = {'label':'', 'value':businesses[i]['business']['name']};
 		}
 
         this.details.refresh();

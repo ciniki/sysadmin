@@ -23,10 +23,16 @@ function ciniki_sysadmin_businessusers() {
         //  
         this.businesses = new M.panel('Business Users',
             'ciniki_sysadmin_businessusers', 'businesses',
-            appPrefix, 'medium', 'simplegrid', 'ciniki.sysadmin.business.users');
+            appPrefix, 'medium', 'sectioned', 'ciniki.sysadmin.business.users');
+		this.businesses.sections = {
+			'_':{'label':'', 'type':'simplegrid', 'num_cols':2, 
+				'headerValues':['Business', 'Users'],
+				},
+			};
+		this.businesses.sectionData = function(s) { return this.data; }
         this.loadData();
 		this.businesses.num_cols = 2;
-        this.businesses.cellValue = function(i, col, d) { 
+        this.businesses.cellValue = function(s, i, col, d) { 
 			if( col == 0 ) { return d['business']['name']; }
 			else if( col == 1 ) {
 				var b = this.data[i]['business'];
@@ -41,7 +47,7 @@ function ciniki_sysadmin_businessusers() {
 			}
 			return '';
 		}
-        this.businesses.rowFn = function(i, d) { return 'M.ciniki_sysadmin_businessusers.showDetails(' + i + ');'; }
+        this.businesses.rowFn = function(s, i, d) { return 'M.ciniki_sysadmin_businessusers.showDetails(' + i + ');'; }
         this.businesses.noData = function() { return 'ERROR - No sysadmins'; }
         this.businesses.addClose('Back');
 
@@ -50,9 +56,9 @@ function ciniki_sysadmin_businessusers() {
         //  
         this.details = new M.panel('Business User',
             'ciniki_sysadmin_businessusers', 'details',
-            appPrefix, 'medium', 'sectionedform', 'ciniki.sysadmin.business.users.details');
+            appPrefix, 'medium', 'sectioned', 'ciniki.sysadmin.business.users.details');
         this.details.data = {'name':'',};
-		this.details.form = {
+		this.details.sections = {
 			'name':{'label':'Name', 'fields':{
 				'name':{'label':'First', 'hidelabel':'yes', 'type':'noedit'}
 				}},
@@ -81,10 +87,10 @@ function ciniki_sysadmin_businessusers() {
 		// Setup the data for the details form
 		//
 		var users = this.businesses.data[bNUM]['business']['users'];
-		this.details.form['users']['fields'] = {};
+		this.details.sections['users']['fields'] = {};
 		this.details.data['name'] = this.businesses.data[bNUM]['business']['name'];
 		for(i in users ) {
-			this.details.form['users']['fields']['u_' + users[i]['user']['id']] = {'label':'Name', 'hidelabel':'yes', 'type':'noedit'};
+			this.details.sections['users']['fields']['u_' + users[i]['user']['id']] = {'label':'Name', 'hidelabel':'yes', 'type':'noedit'};
 			this.details.data['u_' + users[i]['user']['id']] = {'name':users[i]['user']['firstname'] + ' ' + users[i]['user']['lastname'],};
 		}
 
