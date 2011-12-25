@@ -2,9 +2,24 @@
 //
 function ciniki_sysadmin_users() {
 	this.users = null;
-	this.details = null;
 
 	this.init = function() {
+		//
+		// Create the new panel
+		//
+		this.users = new M.panel('Sys Admins',
+			'ciniki_sysadmin_users', 'users',
+			'mc', 'medium', 'sectioned', 'ciniki.sysadmin.users');
+		this.users.sections = {'_':{'label':'', 'list':{}}};
+		this.users.sectionData = function(s) { return this.data; }
+
+		this.users.listValue = function(s, i, d) { return d['user']['firstname'] + ' ' + d['user']['lastname']; }
+		this.users.listFn = function(s, i, d) { return 'M.startApp(\'ciniki.sysadmin.user\',null,\'M.ciniki_sysadmin_users.showUsers();\',\'mc\',{\'id\':\'' + d.user.id + '\'});'; }
+//		this.users.listFn = function(s, i, d) { return 'M.ciniki_sysadmin_users.showDetails(' + i + ');'; }
+		this.users.noData = function() { return 'ERROR - No sysadmins'; }
+		this.users.addButton('add', 'Add', 'M.startModalApp(\'ciniki.users.add\', null, \'M.ciniki_sysadmin_users.add(data);\');');
+		this.users.addClose('Back');
+
 	}
 
 	this.start = function(cb, appPrefix) {
@@ -18,43 +33,10 @@ function ciniki_sysadmin_users() {
 			return false;
 		} 
 
-		//
-		// Create the new panel
-		//
-		this.users = new M.panel('Sys Admins',
-			'ciniki_sysadmin_users', 'users',
-			appPrefix, 'medium', 'sectioned', 'ciniki.sysadmin.users');
-		this.users.sections = {'_':{'label':'', 'list':{}}};
-		this.users.sectionData = function(s) { return this.data; }
-		this.loadData();
-
-		this.users.listValue = function(s, i, d) { return d['user']['firstname'] + ' ' + d['user']['lastname']; }
-		this.users.listFn = function(s, i, d) { return 'M.ciniki_sysadmin_users.showDetails(' + i + ');'; }
-		this.users.noData = function() { return 'ERROR - No sysadmins'; }
-		this.users.addButton('add', 'Add', 'M.startModalApp(\'ciniki.users.add\', null, \'M.ciniki_sysadmin_users.add(data);\');');
-		this.users.addClose('Back');
-
-        //  
-        // Setup the panel to show the details of an owner
-        //  
-        this.details = new M.panel('Sys Admin',
-            'ciniki_sysadmin_users', 'details',
-            appPrefix, 'medium', 'sectioned', 'ciniki.sysadmin.users.details');
-        this.details.data = null;
-        this.details.sections = {'':{'label':'', 'fields':{
-            'email':{'label':'Email', 'type':'noedit'},
-            'firstname':{'label':'First', 'type':'noedit'},
-            'lastname':{'label':'Last', 'type':'noedit'},
-            'display_name':{'label':'Display', 'type':'noedit'},
-            }}};
-        this.details.fieldValue = function(i, d) { return this.data[i]; }
-        this.details.addButton('remove', 'Remove', '');
-        this.details.addClose('back');
-
-        this.users.show(cb);
+		this.showUsers(cb);
 	}
 
-	this.loadData = function() {
+	this.showUsers = function(cb) {
 		//
 		// Get the detail for the user.  Do this for each request, to make sure
 		// we have the current data.  If the user switches businesses, then we
@@ -66,31 +48,8 @@ function ciniki_sysadmin_users() {
 			return false;
 		}
 		this.users.data = rsp['users'];
-	}
-
-    this.showDetails = function(uNUM) {
-        this.details.data = this.users.data[uNUM]['user'];
-        this.details.refresh();
-        if( (M.userPerms & 0x01) == 0x01 ) { 
-            // FIXME: Convert this to a better function!
-            this.details.setButtonFn('remove', 'if( confirm(\'Are you sure you want to remove ' + this.users.data[uNUM]['user']['firstname'] + ' ' + this.users.data[uNUM]['user']['lastname'] + ' as an System Admin?\') == true ) {M.ciniki_sysadmin_users.remove(\'' + uNUM + '\',\'' + this.details.data['id'] + '\');}');         
-		}           
-		this.details.show('M.ciniki_sysadmin_users.users.show();');
-	}   
-
-	// 
-	// Remove the user from being a sysadmin
-	//
-	this.remove = function(userNUM, userID) {
-		// FIXME: Require users password for verification.
-		var rsp = M.api.getJSON('ciniki.users.removeSysAdmin', {'business_id':M.curBusinessID, 'user_id':userID});
-		if( rsp['stat'] != 'ok' ) {
-			M.api.err(rsp);
-		} else {
-			delete(this.users.data[userNUM]);
-		}
 		this.users.refresh();
-		this.details.close();
+		this.users.show(cb);
 	}
 
 	// 

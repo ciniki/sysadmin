@@ -1,6 +1,6 @@
 //
 //
-function ciniki_sysadmin_privilegedusers() {
+function ciniki_sysadmin_allusers() {
     this.users = null;
 
     this.init = function() {
@@ -8,17 +8,27 @@ function ciniki_sysadmin_privilegedusers() {
         // Create the new panel
         //  
         this.users = new M.panel('Privileged Users',
-            'ciniki_sysadmin_privilegedusers', 'users',
-            'mc', 'medium', 'sectioned', 'ciniki.sysadmin.privileged.users');
+            'ciniki_sysadmin_allusers', 'users',
+            'mc', 'medium', 'sectioned', 'ciniki.sysadmin.allusers.users');
 		this.users.sections = {
-			'_':{'label':'', 'type':'simplegrid', 'num_cols':2, 
-				'headerValues':['Name', 'Privileges'],
+			'_':{'label':'', 'type':'simplegrid', 'num_cols':4, 'sortable':'yes',
+				'headerValues':['First', 'Last', 'Status', 'Privileges'],
+				'sortTypes':['text','text','text','text']
 				},
 			};
 		this.users.sectionData = function(s) { return this.data; }
         this.users.cellValue = function(s, i, j, d) { 
-			if( j == 0 ) { return d.user.firstname + ' ' + d.user.lastname; }
-			else if( j == 1 ) {
+			if( j == 0 ) { return d.user.firstname; }
+			else if( j == 1 ) { return d.user.lastname; }
+			else if( j == 2 ) {
+				switch(d.user.status) {
+					case '1': return 'Active';
+					case '10': return 'Locked';
+					case '11': return 'Deleted';
+				}
+				return '';
+			}
+			else if( j == 3 ) {
 				var u = this.data[i].user;
 				var p = '';
 				var c = '';
@@ -29,7 +39,7 @@ function ciniki_sysadmin_privilegedusers() {
 			}
 			return '';
 		}
-		this.users.rowFn = function(s, i, d) { return 'M.startApp(\'ciniki.sysadmin.user\',null,\'M.ciniki_sysadmin_privilegedusers.showUsers();\',\'mc\',{\'id\':\'' + d.user.id + '\'});'; }
+		this.users.rowFn = function(s, i, d) { return 'M.startApp(\'ciniki.sysadmin.user\',null,\'M.ciniki_sysadmin_allusers.showUsers();\',\'mc\',{\'id\':\'' + d.user.id + '\'});'; }
         this.users.noData = function() { return 'ERROR - No sysadmins'; }
         this.users.addClose('Back');
     }   
@@ -39,7 +49,7 @@ function ciniki_sysadmin_privilegedusers() {
         // Create the app container if it doesn't exist, and clear it out 
         // if it does exist.
         //  
-        var appContainer = M.createContainer(appPrefix, 'ciniki_sysadmin_privilegedusers', 'yes');
+        var appContainer = M.createContainer(appPrefix, 'ciniki_sysadmin_allusers', 'yes');
         if( appContainer == null ) { 
             alert('App Error');
             return false;
@@ -50,7 +60,7 @@ function ciniki_sysadmin_privilegedusers() {
     }   
 
 	this.showUsers = function() {
-		var rsp = M.api.getJSON('ciniki.users.getPrivilegedUsers', {});
+		var rsp = M.api.getJSON('ciniki.users.getUsers', {});
 		if( rsp['stat'] != 'ok' ) {
 			M.api.err(rsp);
 			return false;
