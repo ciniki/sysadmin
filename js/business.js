@@ -92,21 +92,19 @@ function ciniki_sysadmin_business() {
 
 		this.details.sections._buttons.buttons = [];
 		if( rsp.business.status == 1 ) {
-			this.details.sections._buttons.buttons['_lock'] = {'label':'Lock Business', 'fn':'M.ciniki_sysadmin_business.lock();'};
-			this.details.sections._buttons.buttons['_archive'] = {'label':'Archive Business', 'fn':'M.ciniki_sysadmin_business.archive();'};
-		} else if( rsp.business.status == 90 ) {
-			this.details.sections._buttons.buttons['_archive'] = {'label':'Activate Business', 'fn':'M.ciniki_sysadmin_business.activate();'};
-		} else if( rsp.business.status == 99 ) {
-			this.details.sections._buttons.buttons['_archive'] = {'label':'Unlock Business', 'fn':'M.ciniki_sysadmin_business.activate();'};
+			this.details.sections._buttons.buttons['_suspend'] = {'label':'Suspend Business', 'fn':'M.ciniki_sysadmin_business.suspend();'};
+			this.details.sections._buttons.buttons['_delete'] = {'label':'Delete Business', 'fn':'M.ciniki_sysadmin_business.delete();'};
+		} else if( rsp.business.status == 50 ) {
+			this.details.sections._buttons.buttons['_suspend'] = {'label':'Activate Business', 'fn':'M.ciniki_sysadmin_business.activate();'};
 		}
 
         this.details.refresh();
         this.details.show();
     }   
 
-	this.lock = function() {
-        if( confirm("Are you sure you want to lock the business?") ) {
-			var rsp = M.api.getJSON('ciniki.businesses.lock', {'id':M.ciniki_sysadmin_business.details.business_id});            
+	this.suspend = function() {
+        if( confirm("Are you sure you want to suspend the business?") ) {
+			var rsp = M.api.getJSON('ciniki.businesses.suspend', {'id':M.ciniki_sysadmin_business.details.business_id});            
 			if( rsp['stat'] != 'ok' ) {
 				M.api.err(rsp); 
 				return false;
@@ -115,9 +113,9 @@ function ciniki_sysadmin_business() {
 		}
 	}
 
-	this.archive = function() {
-		if( confirm('Are you sure you want to archive this business?') == true ) {
-			var rsp = M.api.getJSON('ciniki.businesses.archive', {'id':M.ciniki_sysadmin_business.details.business_id});            
+	this.delete = function() {
+		if( confirm('Are you sure you want to delete this business?  No information will be removed from the database.') == true ) {
+			var rsp = M.api.getJSON('ciniki.businesses.delete', {'id':M.ciniki_sysadmin_business.details.business_id});            
 			if( rsp['stat'] != 'ok' ) {
 				M.api.err(rsp); 
 				return false;
