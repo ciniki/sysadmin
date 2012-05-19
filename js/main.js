@@ -30,6 +30,9 @@ function ciniki_sysadmin_main() {
 				'authlog':{'label':'Auth Log', 'fn':'M.startApp(\'ciniki.monitoring.authlogs\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
 				'authfailures':{'label':'Auth Failures', 'fn':'M.startApp(\'ciniki.monitoring.authfailures\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
 				}},
+//			'billing':{'label':'Billing', 'list':{
+//				'plans':{'label':'Plans', 'fn':'M.startApp(\'ciniki.sysadmin.plans\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
+//				}},
 			'database':{'label':'Database', 'list':{
 				'tables':{'label':'Table Versions', 'fn':'M.startApp(\'ciniki.sysadmin.dbversions\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
 				}},
