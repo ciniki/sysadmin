@@ -37,8 +37,8 @@ function ciniki_sysadmin_business() {
 			if( i == 'status' ) {
 				switch(this.data.status) {
 					case '1': return 'Active';
-					case '90': return 'Archived';
-					case '99': return 'Locked';
+					case '50': return 'Suspended';
+					case '60': return 'Deleted';
 				}
 				return 'Unknown';
 			}
