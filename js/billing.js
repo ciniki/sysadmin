@@ -31,10 +31,7 @@ function ciniki_sysadmin_billing() {
 			return '';
 		};
 		this.businesses.rowFn = function(s, i, d) { 
-			return '';
-			// FIXME: Have this start a business management app, which will display all the information and buttons for modifing a business
-			// Should include everything BusinessUsers module now.
-	//		return 'M.ciniki_sysadmin_billing.showBusiness(\'M.ciniki_sysadmin_billing.showBusinesses();\',\'' + d.business.id + '\');';
+			return 'M.startApp(\'ciniki.sysadmin.business\',null,\'M.ciniki_sysadmin_billing.showBusinesses();\',\'mc\',{\'id\':\'' + d.business.id + '\'});'; 
 		};
         this.businesses.noData = function() { return 'ERROR - No sysadmins'; }
         this.businesses.addClose('Back');

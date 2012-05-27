@@ -16,9 +16,16 @@ function ciniki_sysadmin_business() {
 			'info':{'label':'', 'list':{
 				'name':{'label':'Name', 'value':''},
 				'uuid':{'label':'UUID', 'value':''},
-				'status':{'label':'Status', 'value':''},
+				'business_status':{'label':'Status', 'value':''},
 				'date_added':{'label':'Added', 'value':''},
 				'last_updated':{'label':'Updated', 'value':''},
+				}},
+			'subscription':{'label':'Subscription', 'type':'simplelist', 'list':{
+				'subscription_status_text':{'label':'Status'},
+				'currency':{'label':'Currency'},
+				'monthly':{'label':'Amount'},
+				'trial':{'label':'Trial remaining'},
+				'last_payment_date':{'label':'Last Payment'},
 				}},
 			'users':{'label':'Users', 'type':'simplegrid', 'num_cols':1, 'headerValues':null},
 			'_buttons':{'label':'', 'buttons':{
@@ -34,13 +41,19 @@ function ciniki_sysadmin_business() {
 			}
 		};
 		this.details.listValue = function(s, i, d) { 
-			if( i == 'status' ) {
-				switch(this.data.status) {
+			if( i == 'business_status' ) {
+				switch(this.data.business_status) {
 					case '1': return 'Active';
 					case '50': return 'Suspended';
 					case '60': return 'Deleted';
 				}
 				return 'Unknown';
+			}
+			if( s == 'subscription' ) {
+				switch (i) {
+					case 'monthly': return '$' + this.data.monthly + '/month';
+					case 'trial': return this.data.trial_remaining + ' days';
+				}
 			}
 			return this.data[i];
 		};
@@ -91,11 +104,16 @@ function ciniki_sysadmin_business() {
 		this.details.data = rsp.business;
 
 		this.details.sections._buttons.buttons = [];
-		if( rsp.business.status == 1 ) {
+		if( rsp.business.business_status == 1 ) {
 			this.details.sections._buttons.buttons['_suspend'] = {'label':'Suspend Business', 'fn':'M.ciniki_sysadmin_business.suspend();'};
 			this.details.sections._buttons.buttons['_delete'] = {'label':'Delete Business', 'fn':'M.ciniki_sysadmin_business.delete();'};
-		} else if( rsp.business.status == 50 ) {
+		} else if( rsp.business.business_status == 50 ) {
 			this.details.sections._buttons.buttons['_suspend'] = {'label':'Activate Business', 'fn':'M.ciniki_sysadmin_business.activate();'};
+		}
+
+		this.details.sections.subscription.list.trial.visible = 'no';
+		if( rsp.trial_remaining > 0 ) {
+			this.details.sections.subscription.list.trial.visible = 'yes';
 		}
 
         this.details.refresh();
