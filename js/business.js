@@ -7,7 +7,7 @@ function ciniki_sysadmin_business() {
         //  
         // Setup the panel to show the details of an owner
         //  
-        this.details = new M.panel('User',
+        this.details = new M.panel('Business',
             'ciniki_sysadmin_business', 'details',
             'mc', 'medium', 'sectioned', 'ciniki.sysadmin.business.details');
 		this.details.business_id = 0;
