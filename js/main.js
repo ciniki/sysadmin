@@ -35,8 +35,9 @@ function ciniki_sysadmin_main() {
 //			'billing':{'label':'Billing', 'list':{
 //				'plans':{'label':'Plans', 'fn':'M.startApp(\'ciniki.sysadmin.plans\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
 //				}},
-			'database':{'label':'Database', 'list':{
+			'system':{'label':'System', 'list':{
 				'tables':{'label':'Table Versions', 'fn':'M.startApp(\'ciniki.sysadmin.dbversions\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
+				'code':{'label':'Code Versions', 'fn':'M.startApp(\'ciniki.sysadmin.codeversions\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
 				}},
 //			'documentation':{'label':'Documentation', 'list':{
 //				'modules':{'label':'Modules', 'fn':'M.startApp(\'ciniki.documentation.modules\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
