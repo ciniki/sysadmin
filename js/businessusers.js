@@ -7,14 +7,23 @@ function ciniki_sysadmin_businessusers() {
         this.businesses = new M.panel('Business Users',
             'ciniki_sysadmin_businessusers', 'businesses',
            	'mc', 'medium', 'sectioned', 'ciniki.sysadmin.business.users');
-		this.businesses.sections = {
-			'_':{'label':'', 'type':'simplegrid', 'num_cols':2, 
-				'headerValues':['Business', 'Users'],
-				},
-			};
-		this.businesses.sectionData = function(s) { return this.data; }
-		this.businesses.num_cols = 2;
-        this.businesses.cellValue = function(s, i, col, d) { 
+//		this.businesses.sections = {
+//			'_':{'label':'', 'type':'simplegrid', 'num_cols':1, 
+//				'headerValues':['Business', 'Users'],
+//				'cellClasses':['multiline'],
+//				},
+//			};
+		this.businesses.sectionData = function(s) { return this.data[s]; }
+        this.businesses.cellValue = function(s, i, j, d) { 
+			var c = '<span class="maintext">' + d.business.name + '</span><span class="subtext">';
+			var cm = '';
+			for(i in d.business.users) {
+				c += cm + d.business.users[i].user.firstname
+					+ ' ' + d.business.users[i].user.lastname;
+				cm = ', ';
+			}
+			c += '</span>';
+			return c;
 			if( col == 0 ) { return d['business']['name']; }
 			else if( col == 1 ) {
 				var b = this.data[i]['business'];
@@ -43,20 +52,27 @@ function ciniki_sysadmin_businessusers() {
         if( appContainer == null ) { 
             alert('App Error');
             return false;
-        }   
+        }
 
-        this.businesses.cb = cb;
-		this.showBusinesses();
+		this.showBusinesses(cb);
     }   
 
-	this.showBusinesses = function() {
+	this.showBusinesses = function(cb) {
 		var rsp = M.api.getJSON('ciniki.businesses.getAll', {});
 		if( rsp['stat'] != 'ok' ) {
 			M.api.err();
 			return false;
 		}
-		this.businesses.data = rsp['businesses'];
+		this.businesses.data = {};
+		this.businesses.sections = {};
+		for(i in rsp.categories) {
+			this.businesses.sections[i] = {'label':rsp.categories[i].category.name, 'type':'simplegrid', 'num_cols':1,
+				'cellClasses':['multiline'],
+				};
+			this.businesses.data[i] = rsp.categories[i].category.businesses;
+		}
+
 		this.businesses.refresh();
-		this.businesses.show();
+		this.businesses.show(cb);
 	}
 }
