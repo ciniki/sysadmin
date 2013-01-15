@@ -16,6 +16,7 @@ function ciniki_sysadmin_business() {
 			'info':{'label':'', 'list':{
 				'name':{'label':'Name', 'value':''},
 				'uuid':{'label':'UUID', 'value':''},
+				'category':{'label':'Category', 'value':''},
 				'business_status':{'label':'Status', 'value':''},
 				'date_added':{'label':'Added', 'value':''},
 				'last_updated':{'label':'Updated', 'value':''},
