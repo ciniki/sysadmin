@@ -96,7 +96,7 @@ function ciniki_sysadmin_business() {
 				}}
 			};
 		this.edit.fieldValue = function(s, i, d) { return this.data[i]; };
-		this.edit.fieldHistory = function(i) {
+		this.edit.fieldHistory = function(s, i) {
 			var rsp = M.api.postJSON('ciniki.businesses.getDetailHistory', {'business_id':M.ciniki_sysadmin_business.edit.business_id, 'field':i});
 			if( rsp.stat != 'ok' ) {
 				M.api.err(rsp);
