@@ -32,6 +32,7 @@ function ciniki_sysadmin_main() {
 				'sessions':{'label':'Sessions', 'fn':'M.startApp(\'ciniki.monitoring.sessions\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
 				'authlog':{'label':'Auth Log', 'fn':'M.startApp(\'ciniki.monitoring.authlogs\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
 				'authfailures':{'label':'Auth Failures', 'fn':'M.startApp(\'ciniki.monitoring.authfailures\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
+				'fixhistory':{'label':'Fix User History', 'fn':'M.ciniki_sysadmin_main.fixuserhistory();'},
 				}},
 //			'billing':{'label':'Billing', 'list':{
 //				'plans':{'label':'Plans', 'fn':'M.startApp(\'ciniki.sysadmin.plans\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
@@ -69,4 +70,13 @@ function ciniki_sysadmin_main() {
 	
 		this.menu.show(cb);
 	}
+
+	this.fixuserhistory = function() {
+		var rsp = M.api.getJSON('ciniki.users.historyFix', {});
+		if( rsp.stat != 'ok' ) {
+			M.api.err(rsp);
+			return false;
+		}
+		alert('done');
+	};
 }
