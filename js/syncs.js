@@ -41,7 +41,7 @@ function ciniki_sysadmin_syncs() {
 		this.syncs.cellStyle = function(s, i, j, d) {
 			if( j == 3 && d.sync.last_sync_age > 1800 ) {	// 80 minutes red
 				return 'background: #fbb;';
-			} else if( j == 3 && d.sync.last_sync_age > 100 ) { // 10 minutes yellow
+			} else if( j == 3 && d.sync.last_sync_age > 600 ) { // 10 minutes yellow
 				return 'background: #ffb;';
 			} else if( j == 4 && d.sync.last_partial_age > 180000 ) {	// 2day1hour minutes red
 				return 'background: #fbb;';
