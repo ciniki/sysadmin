@@ -23,7 +23,6 @@ function ciniki_sysadmin_syncs() {
 				'noData':'No current syncronizations',
 				'data':null,
 				},
-//			'_add':{'label':'', 'buttons':{'add':{'label':'Add Syncronization', 'fn':'M.ciniki_sysadmin_syncs.showAdd();'}}},
 		};
 		this.syncs.listLabel = function(s, i, d) { return d.label; }
 		this.syncs.listValue = function(s, i, d) { return d.value; }
@@ -38,6 +37,22 @@ function ciniki_sysadmin_syncs() {
 				case 4: return (d.sync.last_partial!='')?'<span class="maintext">'+d.sync.last_partial.replace(/ ([0-9]+:[0-9]+ ..)/,'</span><span class="subtext">$1')+'</span>':'never';
 				case 5: return (d.sync.last_full!='')?'<span class="maintext">'+d.sync.last_full.replace(/ ([0-9]+:[0-9]+ ..)/,'</span><span class="subtext">$1')+'</span>':'never';
 			}
+		};
+		this.syncs.cellStyle = function(s, i, j, d) {
+			if( j == 3 && d.sync.last_sync_age > 1800 ) {	// 80 minutes red
+				return 'background: #fbb;';
+			} else if( j == 3 && d.sync.last_sync_age > 100 ) { // 10 minutes yellow
+				return 'background: #ffb;';
+			} else if( j == 4 && d.sync.last_partial_age > 180000 ) {	// 2day1hour minutes red
+				return 'background: #fbb;';
+			} else if( j == 4 && d.sync.last_partial_age > 90000 ) { // 1day1hour minutes yellow
+				return 'background: #ffb;';
+			} else if( j == 5 && d.sync.last_full_age > 734400 ) {	// 8day12hour minutes red
+				return 'background: #fbb;';
+			} else if( j == 5 && d.sync.last_full_age > 648000 ) { // 7day12hour minutes yellow
+				return 'background: #ffb;';
+			}
+			return '';
 		};
 //		this.syncs.rowFn = function(s, i, d) { return 'M.ciniki_sysadmin_syncs.showSync(\'M.ciniki_sysadmin_syncs.showInfo();\',\'' + d.sync.id + '\');'; }
 		this.syncs.noData = function() { return 'No syncronizations'; }
