@@ -14,8 +14,8 @@ function ciniki_sysadmin_user() {
 		this.details.data = null;
 		this.details.sections = {
 			'info':{'label':'', 'list':{
-				'firstname':{'label':'Firstname', 'value':''},
-				'lastname':{'label':'Lastname', 'value':''},
+				'name':{'label':'Name', 'value':''},
+				'username':{'label':'Username', 'value':''},
 				'email':{'label':'Email', 'value':''},
 				'display_name':{'label':'Display Name', 'value':''},
 				'status':{'label':'Status', 'value':''},
@@ -52,6 +52,7 @@ function ciniki_sysadmin_user() {
 			}
 		};
 		this.details.listValue = function(s, i, d) { 
+			if( i == 'name' ) { return this.data.firstname + ' ' + this.data.lastname; }
 			if( s == 'logs' ) { return d.value; }
 			if( i == 'timeout' && this.data.timeout == '0' ) { return 'default'; }
 			if( i == 'perms' && parseInt(this.data.perms) == 0 ) { return '-'; }
