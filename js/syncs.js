@@ -39,17 +39,17 @@ function ciniki_sysadmin_syncs() {
 			}
 		};
 		this.syncs.cellStyle = function(s, i, j, d) {
-			if( j == 3 && d.sync.last_sync_age > 1800 ) {	// 80 minutes red
+			if( j == 3 && d.sync.last_sync_status == 'alert' ) {	// 80 minutes red
 				return 'background: #fbb;';
-			} else if( j == 3 && d.sync.last_sync_age > 600 ) { // 10 minutes yellow
+			} else if( j == 3 && d.sync.last_sync_status == 'warn' ) { // 10 minutes yellow
 				return 'background: #ffb;';
-			} else if( j == 4 && d.sync.last_partial_age > 180000 ) {	// 2day1hour minutes red
+			} else if( j == 4 && d.sync.last_partial_status == 'alert' ) {	// 2day1hour minutes red
 				return 'background: #fbb;';
-			} else if( j == 4 && d.sync.last_partial_age > 90000 ) { // 1day1hour minutes yellow
+			} else if( j == 4 && d.sync.last_partial_status == 'warn' ) { // 1day1hour minutes yellow
 				return 'background: #ffb;';
-			} else if( j == 5 && d.sync.last_full_age > 734400 ) {	// 8day12hour minutes red
+			} else if( j == 5 && d.sync.last_full_status == 'alert' ) {	// 8day12hour minutes red
 				return 'background: #fbb;';
-			} else if( j == 5 && d.sync.last_full_age > 648000 ) { // 7day12hour minutes yellow
+			} else if( j == 5 && d.sync.last_full_status == 'warn' ) { // 7day12hour minutes yellow
 				return 'background: #ffb;';
 			}
 			return '';
