@@ -28,6 +28,7 @@ function ciniki_sysadmin_main() {
 				'all':{'label':'All Users', 'fn':'M.startApp(\'ciniki.sysadmin.allusers\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
 				}},
 			'monitoring':{'label':'Monitoring', 'list':{
+				'errorlogs':{'label':'Error Logs', 'fn':'M.startApp(\'ciniki.monitoring.errors\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
 				'changelogs':{'label':'Change Logs', 'fn':'M.startApp(\'ciniki.monitoring.changelogs\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
 				'actionlogs':{'label':'Action Logs', 'fn':'M.startApp(\'ciniki.monitoring.actionlogs\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
 				'sessions':{'label':'Sessions', 'fn':'M.startApp(\'ciniki.monitoring.sessions\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
