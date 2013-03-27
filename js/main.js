@@ -19,6 +19,7 @@ function ciniki_sysadmin_main() {
 				'businesses':{'label':'Businesses', 'fn':'M.startApp(\'ciniki.sysadmin.businessusers\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
 				'billing':{'label':'Billing', 'fn':'M.startApp(\'ciniki.sysadmin.billing\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
 				'syncs':{'label':'Syncronizations', 'fn':'M.startApp(\'ciniki.sysadmin.syncs\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
+				'domains':{'label':'Domains', 'fn':'M.startApp(\'ciniki.sysadmin.domains\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
 				}},
 			'users':{'label':'Users', 'list':{
 				'sysadmins':{'label':'Sys Admins', 'fn':'M.startApp(\'ciniki.sysadmin.users\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
