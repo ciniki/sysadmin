@@ -34,6 +34,9 @@ function ciniki_sysadmin_domains() {
 				if( d.domain.isprimary == 'yes' ) {
 					primary = ' - Primary';
 				}
+				if( d.domain.managed_by != '' ) {
+					primary += ' - ' + d.domain.managed_by;
+				}
 				return '<span class="maintext">' + d.domain.domain + '</span><span class="subtext">' + M.ciniki_sysadmin_domains.domainStatus[d.domain.status] + primary + '</span>';
 			}
 			if( j == 2 ) {
