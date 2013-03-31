@@ -14,8 +14,11 @@ function ciniki_sysadmin_billing() {
 		this.businesses.sections = {};
 		this.businesses.sectionData = function(s) { return this.data[s]; }
         this.businesses.cellValue = function(s, i, j, d) { 
+			if( d.business.status == 'Trial' && j == 1 ) {
+				return '<span class="maintext">' + d.business.business_status + '</span><span class="subtext">' + d.business.trial_remaining + '</span>';
+			}
 			switch(j) {
-				case 0: return '<span class="maintext">' + d.business.name + '</span><span class="subtext">' + d.business.payment_type + '</span>';
+				case 0: return '<span class="maintext">' + d.business.name + '</span><span class="subtext">' + d.business.payment_type + ' - ' + d.business.payment_frequency + '</span>';
 				case 1: return d.business.business_status;
 				case 2: return d.business.monthly;
 				case 3: return '<span class="maintext">' + d.business.last_payment_date + '</span><span class="subtext">' + d.business.paid_until + '</span>';
@@ -59,7 +62,7 @@ function ciniki_sysadmin_billing() {
 				'type':'simplegrid', 'num_cols':4, 'sortable':'yes',
 				'headerValues':['Business', 'Status', 'Monthly', 'Last Payment'],
 				'sortTypes':['text','text','text','number','date'],
-				'cellClasses':['multiline', 'aligncenter', 'aligncenter', 'multiline', ''],
+				'cellClasses':['multiline', 'multiline', 'aligncenter', 'multiline', ''],
 			};
 		}
 		this.businesses.refresh();
