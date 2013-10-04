@@ -75,7 +75,7 @@ function ciniki_sysadmin_business() {
 		this.edit.sections = {
 			'general':{'label':'General', 'fields':{
 				'business.name':{'label':'Name', 'type':'text'},
-				'business.category':{'label':'Category', 'type':'text'},
+				'business.category':{'label':'Category', 'type':'text', 'livesearch':'yes', 'livesearchempty':'yes'},
 				'business.sitename':{'label':'Sitename', 'type':'text'},
 				'business.tagline':{'label':'Tagline', 'type':'text'},
 				}},
@@ -103,6 +103,28 @@ function ciniki_sysadmin_business() {
 				return false;
 			}
 			return rsp;
+		};
+		this.edit.liveSearchCb = function(s, i, value) {
+			if( i == 'business.category' ) {
+				var rsp = M.api.getJSONBgCb('ciniki.businesses.searchCategory', 
+					{'business_id':M.curBusinessID, 'start_needle':value, 'limit':15},
+					function(rsp) {
+						M.ciniki_sysadmin_business.edit.liveSearchShow(s, i, M.gE(M.ciniki_sysadmin_business.edit.panelUID + '_' + i), rsp.results);
+					});
+			}
+		};
+		this.edit.liveSearchResultValue = function(s, f, i, j, d) {
+			if( f == 'business.category' && d.result != null ) { return d.result.name; }
+			return '';
+		};
+		this.edit.liveSearchResultRowFn = function(s, f, i, j, d) { 
+			if( f == 'business.category' && d.result != null ) {
+				return 'M.ciniki_sysadmin_business.edit.updateField(\'' + s + '\',\'' + f + '\',\'' + escape(d.result.name) + '\');';
+			}
+		};
+		this.edit.updateField = function(s, fid, result) {
+			M.gE(this.panelUID + '_' + fid).value = unescape(result);
+			this.removeLiveSearch(s, fid);
 		};
 		this.edit.addButton('save', 'Save', 'M.ciniki_sysadmin_business.save();');
 		this.edit.addClose('Cancel');
