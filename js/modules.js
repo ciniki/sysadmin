@@ -74,15 +74,16 @@ function ciniki_sysadmin_modules() {
 		//
 		// Load module list
 		//
-		var rsp = M.api.getJSON('ciniki.businesses.reportModules', {});
-		if( rsp['stat'] != 'ok' ) {
-			M.api.err(rsp);
-			return false;
-		}
-		this.main.data = rsp.modules;
-
-		this.main.refresh();
-		this.main.show(cb);
+		var rsp = M.api.getJSONCb('ciniki.businesses.reportModules', {}, function(rsp) {
+			if( rsp.stat != 'ok' ) {
+				M.api.err(rsp);
+				return false;
+			}
+			var p = M.ciniki_sysadmin_modules.main;
+			p.data = rsp.modules;
+			p.refresh();
+			p.show(cb);
+		});
 	}
 
 	this.showModule = function(cb, mod) {
@@ -91,7 +92,7 @@ function ciniki_sysadmin_modules() {
 		//
 		for(i in this.main.data) {
 			if( this.main.data[i].module.name == mod ) {	
-				this.module.data['businesses'] = this.main.data[i].module.businesses;
+				this.module.data.businesses = this.main.data[i].module.businesses;
 			}
 		}
 		this.module.refresh();

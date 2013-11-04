@@ -34,6 +34,8 @@ function ciniki_sysadmin_user() {
             'authlogs':{'label':'Auth Log', 'type':'simplegrid', 'num_cols':2, 'limit_rows':5,
                 'headerValues':['User','IP/Session'],
 				'cellClasses':['multiline', 'multiline'],
+				'addTxt':'More...',
+				'addFn': 'M.ciniki_sysadmin_user.showAuthLogs(\'M.ciniki_sysadmin_user.details.show();\',M.ciniki_sysadmin_user.details.user_id);',
 				// FIXME: Add moreFn to allow full list of auth logs
             },  
 //			'logs':{'label':'Logs', 'list':{
@@ -42,13 +44,13 @@ function ciniki_sysadmin_user() {
 			};
 		this.details.user_id = 0;
 		this.details.sectionData = function(s) {
-			if( s == 'businesses' ) { return this.data['businesses']; }
-			if( s == 'authlogs' ) { return this.data['authlogs']; }
+			if( s == 'businesses' ) { return this.data.businesses; }
+			if( s == 'authlogs' ) { return this.data.authlogs; }
 			return this.sections[s].list;
 		};
 		this.details.listLabel = function(s, i, d) {
-			if( d['label'] != null ) {
-				return d['label'];
+			if( d.label != null ) {
+				return d.label;
 			}
 		};
 		this.details.listValue = function(s, i, d) { 
@@ -108,8 +110,8 @@ function ciniki_sysadmin_user() {
 		this.authlogs.dataOrder = 'reverse';		// Display the newest logs at the top
         this.authlogs.sections = { 
             '_info':{'label':'', 'type':'simplegrid', 'num_cols':3, 'limit_rows':5,
-                'headerValues':['username','api_key','ip_address'],
-				'cellClasses':['multiline', '', 'multiline'],
+                'headerValues':['username','IP/Session'],
+				'cellClasses':['multiline', 'multiline'],
             },  
         };  
         this.authlogs.sectionData = function(s) { return this.data; }
@@ -171,71 +173,74 @@ function ciniki_sysadmin_user() {
     }   
 
     this.showDetails = function(cb, id) {
-		if( cb != null ) {
-			this.details.cb = cb;
-		}
-		if( id == null ) {
-			id = this.details.user_id;
-		} else {
+		if( id != null ) {
 			this.details.user_id = id;
 		}
 		// 
 		// Setup the data for the details form
 		//
-		var rsp = M.api.getJSON('ciniki.users.get', {'user_id':id});
-		if( rsp['stat'] != 'ok' ) {
-			M.api.err(rsp);
-			return false;
-		}
-		this.details.data = rsp.user;
-
-		if( rsp.user.status == 11 ) {
-			this.details.sections._buttons.buttons['_delete'] = {'label':'Restore user', 'fn':'M.ciniki_sysadmin_user.undelete();'};
-		} else {
-			if( rsp.user.status == 1 ) {
-				this.details.sections._buttons.buttons['_lock'] = {'label':'Lock user', 'fn':'M.ciniki_sysadmin_user.lock();'};
-			} else if( rsp.user.status == 10 ) {
-				this.details.sections._buttons.buttons['_lock'] = {'label':'Unlock user', 'fn':'M.ciniki_sysadmin_user.unlock();'};
+		var rsp = M.api.getJSONCb('ciniki.users.get', {'user_id':this.details.user_id}, function(rsp) {
+			if( rsp.stat != 'ok' ) {
+				M.api.err(rsp);
+				return false;
 			}
-			this.details.sections._buttons.buttons['_delete'] = {'label':'Delete user', 'fn':'M.ciniki_sysadmin_user.delete();'};
-		}
-		if( (rsp.user.perms&0x01) == 0x01 ) {
-			this.details.sections._buttons.buttons['_sysadmin'] = {'label':'Remove Sysadmin', 'fn':'M.ciniki_sysadmin_user.removeSysAdmin();'};
-		} else {
-			this.details.sections._buttons.buttons['_sysadmin'] = {'label':'Make Sysadmin', 'fn':'M.ciniki_sysadmin_user.makeSysAdmin();'};
-		}
+			var p = M.ciniki_sysadmin_user.details;
+			p.data = rsp.user;
 
-		var rsp = M.api.getJSON('ciniki.users.authLogs', {'user_id':id, 'limit':'6'});
-		if( rsp['stat'] != 'ok' ) {
-			M.api.err(rsp);
-			return false;
-		}
-		this.details.data.authlogs = rsp.logs;
+			if( rsp.user.status == 11 ) {
+				p.sections._buttons.buttons._delete = {'label':'Restore user', 'fn':'M.ciniki_sysadmin_user.undelete();'};
+			} else {
+				if( rsp.user.status == 1 ) {
+					p.sections._buttons.buttons._lock = {'label':'Lock user', 'fn':'M.ciniki_sysadmin_user.lock();'};
+				} else if( rsp.user.status == 10 ) {
+					p.sections._buttons.buttons._lock = {'label':'Unlock user', 'fn':'M.ciniki_sysadmin_user.unlock();'};
+				}
+				p.sections._buttons.buttons._delete = {'label':'Delete user', 'fn':'M.ciniki_sysadmin_user.delete();'};
+			}
+			if( (rsp.user.perms&0x01) == 0x01 ) {
+				p.sections._buttons.buttons._sysadmin = {'label':'Remove Sysadmin', 'fn':'M.ciniki_sysadmin_user.removeSysAdmin();'};
+			} else {
+				p.sections._buttons.buttons._sysadmin = {'label':'Make Sysadmin', 'fn':'M.ciniki_sysadmin_user.makeSysAdmin();'};
+			}
 
-        this.details.refresh();
-        this.details.show();
-    }   
+			var rsp = M.api.getJSONCb('ciniki.users.authLogs', {'user_id':id, 'limit':'6'}, function(rsp) {
+				if( rsp.stat != 'ok' ) {
+					M.api.err(rsp);
+					return false;
+				}
+				var p = M.ciniki_sysadmin_user.details;
+				p.data.authlogs = rsp.logs;
+				p.refresh();
+				p.show(cb);
+			});
+		});
+    }
 
 	this.resetPassword = function() {
         if( confirm("Are you sure you want to reset their password?") ) {
-			var rsp = M.api.getJSON('ciniki.users.resetPassword', {'user_id':M.ciniki_sysadmin_user.details.user_id});            
-			if( rsp['stat'] != 'ok' ) {
-				M.api.err(rsp); 
-				return false;
-			}
-			alert("Their password has been reset and emailed to them.");
+			var rsp = M.api.getJSONCb('ciniki.users.resetPassword', 
+				{'user_id':M.ciniki_sysadmin_user.details.user_id}, function(rsp) {
+					if( rsp.stat != 'ok' ) {
+						M.api.err(rsp); 
+						return false;
+					}
+					alert("Their password has been reset and emailed to them.");
+				});
 		}
 	}
 
 	this.setPassword = function() {
 		var newpassword = prompt("New password:", "");
 		if( newpassword != null && newpassword != '' ) {
-			var rsp = M.api.postJSON('ciniki.users.setPassword', {'user_id':M.ciniki_sysadmin_user.details.user_id}, 'password='+encodeURIComponent(newpassword));
-			if( rsp['stat'] != 'ok' ) {
-				M.api.err(rsp);
-				return false;
-			}
-			alert('Password set');
+			var rsp = M.api.postJSONCb('ciniki.users.setPassword', 
+				{'user_id':M.ciniki_sysadmin_user.details.user_id}, 'password='+encodeURIComponent(newpassword),
+				function(rsp) {
+					if( rsp.stat != 'ok' ) {
+						M.api.err(rsp);
+						return false;
+					}
+					alert('Password set');
+				});
 		} else {
 			alert('No password specified, nothing changed');
 		}
@@ -243,57 +248,73 @@ function ciniki_sysadmin_user() {
 
 	this.lock = function() {
 		if( this.details.user_id > 0 ) {
-			var rsp = M.api.getJSON('ciniki.users.lock', {'user_id':this.details.user_id});
-			if( rsp['stat'] != 'ok' ) {
-				M.api.err(rsp);
-				return false;
-			}
+			var rsp = M.api.getJSONCb('ciniki.users.lock', {'user_id':this.details.user_id}, function(rsp) {
+				if( rsp.stat != 'ok' ) {
+					M.api.err(rsp);
+					return false;
+				}
+				M.ciniki_sysadmin_user.showDetails();
+			});
 		}
-		this.showDetails();
 	}
 	this.unlock = function() {
 		if( this.details.user_id > 0 ) {
-			var rsp = M.api.getJSON('ciniki.users.unlock', {'user_id':this.details.user_id});
-			if( rsp['stat'] != 'ok' ) {
-				M.api.err(rsp);
-				return false;
-			}
+			var rsp = M.api.getJSONCb('ciniki.users.unlock', {'user_id':this.details.user_id}, function(rsp) {
+				if( rsp.stat != 'ok' ) {
+					M.api.err(rsp);
+					return false;
+				}
+				M.ciniki_sysadmin_user.showDetails();
+			});
 		}
-		this.showDetails();
 	}
 
 	this.delete = function() {
 		if( confirm('Are you sure you want to delete ' + this.details.data.firstname + ' ' + this.details.data.lastname + '?') == true ) {
-			var rsp = M.api.getJSON('ciniki.users.delete', {'business_id':M.curBusinessID, 'user_id':M.ciniki_sysadmin_user.details.user_id});
-			if( rsp['stat'] != 'ok' ) {
-				M.api.err(rsp);
-			}
-			this.showDetails();
+			var rsp = M.api.getJSONCb('ciniki.users.delete', 
+				{'business_id':M.curBusinessID, 'user_id':M.ciniki_sysadmin_user.details.user_id}, function(rsp) {
+					if( rsp.stat != 'ok' ) {
+						M.api.err(rsp);
+						return false;
+					}
+					M.ciniki_sysadmin_user.showDetails();
+				});
 		}
 	}
 	this.undelete = function() {
-		var rsp = M.api.getJSON('ciniki.users.undelete', {'business_id':M.curBusinessID, 'user_id':M.ciniki_sysadmin_user.details.user_id});
-		if( rsp['stat'] != 'ok' ) {
-			M.api.err(rsp);
-		}
-		this.showDetails();
+		var rsp = M.api.getJSONCb('ciniki.users.undelete', 
+			{'business_id':M.curBusinessID, 'user_id':M.ciniki_sysadmin_user.details.user_id}, function(rsp) {
+				if( rsp.stat != 'ok' ) {
+					M.api.err(rsp);
+					return false;
+				}
+				M.ciniki_sysadmin_user.showDetails();
+			});
 	}
+
 	this.makeSysAdmin = function() {
 		if( confirm('Are you sure you want to make ' + this.details.data.firstname + ' ' + this.details.data.lastname + ' a System Admin?') == true ) {
-			var rsp = M.api.getJSON('ciniki.users.makeSysAdmin', {'business_id':M.curBusinessID, 'user_id':M.ciniki_sysadmin_user.details.user_id});
-			if( rsp['stat'] != 'ok' ) {
-				M.api.err(rsp);
-			}
-			this.showDetails();
+			var rsp = M.api.getJSONCb('ciniki.users.makeSysAdmin', 
+				{'business_id':M.curBusinessID, 'user_id':M.ciniki_sysadmin_user.details.user_id}, function(rsp) {
+					if( rsp.stat != 'ok' ) {
+						M.api.err(rsp);
+						return false;
+					}
+					M.ciniki_sysadmin_user.showDetails();
+				});
 		}
 	}
+
 	this.removeSysAdmin = function() {
 		if( confirm('Are you sure you want to remove ' + this.details.data.firstname + ' ' + this.details.data.lastname + ' as a System Admin?') == true ) {
-			var rsp = M.api.getJSON('ciniki.users.removeSysAdmin', {'business_id':M.curBusinessID, 'user_id':M.ciniki_sysadmin_user.details.user_id});
-			if( rsp['stat'] != 'ok' ) {
-				M.api.err(rsp);
-			}
-			this.showDetails();
+			var rsp = M.api.getJSONCb('ciniki.users.removeSysAdmin', 
+				{'business_id':M.curBusinessID, 'user_id':M.ciniki_sysadmin_user.details.user_id}, function(rsp) {
+					if( rsp.stat != 'ok' ) {
+						M.api.err(rsp);
+						return false;
+					}
+					M.ciniki_sysadmin_user.showDetails();
+				});
 		}
 	}
 
@@ -301,14 +322,16 @@ function ciniki_sysadmin_user() {
 		if( uid != null && uid != 0 ) {
 			this.authlogs.user_id = uid;
 		}
-		var rsp = M.api.getJSON('ciniki.users.authLogs', {'user_id':uid});
-		if( rsp['stat'] != 'ok' ) {
-			M.api.err(rsp);
-			return false;
-		}
-		this.authlogs.data = rsp.logs;
-		this.authlogs.refresh();
-		this.authlogs.show(cb);
+		var rsp = M.api.getJSONCb('ciniki.users.authLogs', {'user_id':uid, 'limit':'100'}, function(rsp) {
+			if( rsp.stat != 'ok' ) {
+				M.api.err(rsp);
+				return false;
+			}
+			var p = M.ciniki_sysadmin_user.authlogs;
+			p.data = rsp.logs;
+			p.refresh();
+			p.show(cb);
+		});
 	}
 
 	this.showActionLogs = function(cb, uid, sid) {
@@ -318,13 +341,16 @@ function ciniki_sysadmin_user() {
 		if( sid != null && sid != 0 ) {
 			M.ciniki_sysadmin_user.actionlogs.session_key = sid;
 		}
-		var rsp = M.api.getJSON('ciniki.core.monitorActionLogs', {'session_key':this.actionlogs.session_key});
-		if( rsp['stat'] != 'ok' ) {
-			M.api.err(rsp);
-			return false;
-		}
-		this.actionlogs.data = rsp.logs;
-		this.actionlogs.refresh();
-		this.actionlogs.show(cb);
+		var rsp = M.api.getJSONCb('ciniki.core.monitorActionLogs', 
+			{'session_key':this.actionlogs.session_key}, function(rsp) {
+				if( rsp.stat != 'ok' ) {
+					M.api.err(rsp);
+					return false;
+				}
+				var p = M.ciniki_sysadmin_user.actionlogs;
+				p.data = rsp.logs;
+				p.refresh();
+				p.show(cb);
+			});
 	}
 }

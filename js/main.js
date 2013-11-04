@@ -75,11 +75,12 @@ function ciniki_sysadmin_main() {
 	}
 
 	this.fixuserhistory = function() {
-		var rsp = M.api.getJSON('ciniki.users.historyFix', {});
-		if( rsp.stat != 'ok' ) {
-			M.api.err(rsp);
-			return false;
-		}
-		alert('done');
+		var rsp = M.api.getJSONCb('ciniki.users.historyFix', {}, function(rsp) {
+			if( rsp.stat != 'ok' ) {
+				M.api.err(rsp);
+				return false;
+			}
+			alert('done');
+		});
 	};
 }

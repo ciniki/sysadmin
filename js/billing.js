@@ -48,24 +48,25 @@ function ciniki_sysadmin_billing() {
     };
 
 	this.showBusinesses = function(cb) {
-		var rsp = M.api.getJSON('ciniki.businesses.subscriptionStatus', {});
-		if( rsp['stat'] != 'ok' ) {
-			M.api.err(rsp);
-			return false;
-		}
-//		this.businesses.data = rsp.statuses;
-		this.businesses.data = {};
-		this.businesses.sections = {};
-		for(i in rsp.statuses) {
-			this.businesses.data[i] = rsp.statuses[i].status.businesses;
-			this.businesses.sections[i] = {'label':rsp.statuses[i].status.status, 
-				'type':'simplegrid', 'num_cols':4, 'sortable':'yes',
-				'headerValues':['Business', 'Status', 'Monthly', 'Last Payment'],
-				'sortTypes':['text','text','text','number','date'],
-				'cellClasses':['multiline', 'multiline', 'aligncenter', 'multiline', ''],
-			};
-		}
-		this.businesses.refresh();
-		this.businesses.show(cb);
+		var rsp = M.api.getJSONCb('ciniki.businesses.subscriptionStatus', {}, function(rsp) {
+			if( rsp.stat != 'ok' ) {
+				M.api.err(rsp);
+				return false;
+			}
+			var p = M.ciniki_sysadmin_billing.businesses;
+			p.data = {};
+			p.sections = {};
+			for(i in rsp.statuses) {
+				p.data[i] = rsp.statuses[i].status.businesses;
+				p.sections[i] = {'label':rsp.statuses[i].status.status, 
+					'type':'simplegrid', 'num_cols':4, 'sortable':'yes',
+					'headerValues':['Business', 'Status', 'Monthly', 'Last Payment'],
+					'sortTypes':['text','text','text','number','date'],
+					'cellClasses':['multiline', 'multiline', 'aligncenter', 'multiline', ''],
+				};
+			}
+			p.refresh();
+			p.show(cb);
+		});
 	};
 }

@@ -33,12 +33,12 @@ function ciniki_sysadmin_business() {
 				}},
 			};
 		this.details.sectionData = function(s) {
-			if( s == 'users' ) { return this.data['users']; }
+			if( s == 'users' ) { return this.data.users; }
 			return this.sections[s].list;
 		};
 		this.details.listLabel = function(s, i, d) {
-			if( d['label'] != null ) {
-				return d['label'];
+			if( d.label != null ) {
+				return d.label;
 			}
 		};
 		this.details.listValue = function(s, i, d) { 
@@ -97,7 +97,7 @@ function ciniki_sysadmin_business() {
 			};
 		this.edit.fieldValue = function(s, i, d) { return this.data[i]; };
 		this.edit.fieldHistory = function(s, i) {
-			var rsp = M.api.postJSON('ciniki.businesses.getDetailHistory', {'business_id':M.ciniki_sysadmin_business.edit.business_id, 'field':i});
+			var rsp = M.api.getJSON('ciniki.businesses.getDetailHistory', {'business_id':M.ciniki_sysadmin_business.edit.business_id, 'field':i});
 			if( rsp.stat != 'ok' ) {
 				M.api.err(rsp);
 				return false;
@@ -156,58 +156,66 @@ function ciniki_sysadmin_business() {
 		// 
 		// Setup the data for the details form
 		//
-		var rsp = M.api.getJSON('ciniki.businesses.get', {'id':this.details.business_id});
-		if( rsp.stat != 'ok' ) {
-			M.api.err(rsp);
-			return false;
-		}
-		this.details.data = rsp.business;
+		var rsp = M.api.getJSONCb('ciniki.businesses.get', {'id':this.details.business_id}, function(rsp) {
+			if( rsp.stat != 'ok' ) {
+				M.api.err(rsp);
+				return false;
+			}
+			var p = M.ciniki_sysadmin_business.details;
+			p.data = rsp.business;
 
-		this.details.sections._buttons.buttons = [];
-		if( rsp.business.business_status == 1 ) {
-			this.details.sections._buttons.buttons['_suspend'] = {'label':'Suspend Business', 'fn':'M.ciniki_sysadmin_business.suspend();'};
-			this.details.sections._buttons.buttons['_delete'] = {'label':'Delete Business', 'fn':'M.ciniki_sysadmin_business.delete();'};
-		} else if( rsp.business.business_status == 50 ) {
-			this.details.sections._buttons.buttons['_suspend'] = {'label':'Activate Business', 'fn':'M.ciniki_sysadmin_business.activate();'};
-		}
+			p.sections._buttons.buttons = [];
+			if( rsp.business.business_status == 1 ) {
+				p.sections._buttons.buttons._suspend = {'label':'Suspend Business', 'fn':'M.ciniki_sysadmin_business.suspend();'};
+				p.sections._buttons.buttons._delete = {'label':'Delete Business', 'fn':'M.ciniki_sysadmin_business.delete();'};
+			} else if( rsp.business.business_status == 50 ) {
+				p.sections._buttons.buttons._suspend = {'label':'Activate Business', 'fn':'M.ciniki_sysadmin_business.activate();'};
+			}
 
-		this.details.sections.subscription.list.trial.visible = 'no';
-		if( rsp.trial_remaining > 0 ) {
-			this.details.sections.subscription.list.trial.visible = 'yes';
-		}
+			p.sections.subscription.list.trial.visible = 'no';
+			if( rsp.trial_remaining > 0 ) {
+				p.sections.subscription.list.trial.visible = 'yes';
+			}
 
-        this.details.refresh();
-        this.details.show(cb);
-    }   
+			p.refresh();
+			p.show(cb);
+		});
+    }
 
 	this.suspend = function() {
         if( confirm("Are you sure you want to suspend the business?") ) {
-			var rsp = M.api.getJSON('ciniki.businesses.suspend', {'id':M.ciniki_sysadmin_business.details.business_id});            
-			if( rsp['stat'] != 'ok' ) {
-				M.api.err(rsp); 
-				return false;
-			}
-			this.showDetails();
+			var rsp = M.api.getJSONCb('ciniki.businesses.suspend', 
+				{'id':M.ciniki_sysadmin_business.details.business_id}, function(rsp) {
+					if( rsp.stat != 'ok' ) {
+						M.api.err(rsp); 
+						return false;
+					}
+					M.ciniki_sysadmin_business.showDetails();
+				});
 		}
 	}
 
 	this.delete = function() {
 		if( confirm('Are you sure you want to delete this business?  No information will be removed from the database.') == true ) {
-			var rsp = M.api.getJSON('ciniki.businesses.delete', {'id':M.ciniki_sysadmin_business.details.business_id});            
-			if( rsp['stat'] != 'ok' ) {
-				M.api.err(rsp); 
-				return false;
-			}
-			this.showDetails();
+			var rsp = M.api.getJSONCb('ciniki.businesses.delete', 
+				{'id':M.ciniki_sysadmin_business.details.business_id}, function(rsp) {
+					if( rsp.stat != 'ok' ) {
+						M.api.err(rsp); 
+						return false;
+					}
+					M.ciniki_sysadmin_business.showDetails();
+				});
 		}
 	}
 	this.activate = function() {
-		var rsp = M.api.getJSON('ciniki.businesses.activate', {'id':M.ciniki_sysadmin_business.details.business_id});            
-		if( rsp['stat'] != 'ok' ) {
-			M.api.err(rsp); 
-			return false;
-		}
-		this.showDetails();
+		var rsp = M.api.getJSONCb('ciniki.businesses.activate', 
+			{'id':M.ciniki_sysadmin_business.details.business_id}, function(rsp) {
+				if( rsp.stat != 'ok' ) {
+					M.api.err(rsp); 
+					return false;
+				}
+				M.ciniki_sysadmin_business.showDetails();
+			});
 	}
 
 	this.showEdit = function(cb, bid) {
@@ -217,28 +225,32 @@ function ciniki_sysadmin_business() {
 		//
 		// Get the detail for the business.  
 		//
-		var rsp = M.api.getJSON('ciniki.businesses.getDetails', {'business_id':this.edit.business_id, 'keys':'business,contact'});
-		if( rsp.stat != 'ok' ) {
-			M.api.err(rsp);
-			return false;
-		}
-		this.edit.data = rsp.details;
-		this.edit.show(cb);
+		var rsp = M.api.getJSONCb('ciniki.businesses.getDetails', 
+			{'business_id':this.edit.business_id, 'keys':'business,contact'}, function(rsp) {
+				if( rsp.stat != 'ok' ) {
+					M.api.err(rsp);
+					return false;
+				}
+				var p = M.ciniki_sysadmin_business.edit;
+				p.data = rsp.details;
+				p.show(cb);
+			});
 	}
 
 	this.save = function() {
 		// Serialize the form data into a string for posting
 		var c = this.edit.serializeForm('no');
-		if( c == '' ) {
-			alert("No changes to save");
-			return false;
-		} 
-
-		var rsp = M.api.postJSON('ciniki.businesses.updateDetails', {'business_id':this.edit.business_id}, c);
-		if( rsp.stat != 'ok' ) {
-			M.api.err(rsp);
-			return false;
+		if( c != '' ) {
+			var rsp = M.api.postJSONCb('ciniki.businesses.updateDetails', 
+				{'business_id':this.edit.business_id}, c, function(rsp) {
+					if( rsp.stat != 'ok' ) {
+						M.api.err(rsp);
+						return false;
+					}
+					M.ciniki_sysadmin_business.edit.close();
+				});
+		} else {
+			this.edit.close();
 		}
-		this.edit.close();
 	}
 }

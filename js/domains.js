@@ -84,29 +84,23 @@ function ciniki_sysadmin_domains() {
 		if( args != null && args.business != null && args.business != '' ) {
 			M.curBusinessID = args.business;
 		}
-		if( args != null && args.domain != null && args.domain != '' ) {
-			this.showDomain(cb, args.domain);
-		} else {
+//		if( args != null && args.domain != null && args.domain != '' ) {
+//			this.showDomain(cb, args.domain);
+//		} else {
 			this.showMenu(cb);
-		}
+//		}
 	}
 
 	this.showMenu = function(cb) {
-		if( cb != null ) {
-			this.menu.cb = cb;
-		}
-		
-		//
-		// Load domain list
-		//
-		var rsp = M.api.getJSON('ciniki.businesses.domainListAll', {});
-		if( rsp['stat'] != 'ok' ) {
-			M.api.err(rsp);
-			return false;
-		}
-		this.menu.data = rsp.domains;
-
-		this.menu.refresh();
-		this.menu.show();
+		var rsp = M.api.getJSONCb('ciniki.businesses.domainListAll', {}, function(rsp) {
+			if( rsp.stat != 'ok' ) {
+				M.api.err(rsp);
+				return false;
+			}
+			var p = M.ciniki_sysadmin_domains.menu;
+			p.data = rsp.domains;
+			p.refresh();
+			p.show(cb);
+		});
 	}
 };

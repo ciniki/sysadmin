@@ -13,7 +13,7 @@ function ciniki_sysadmin_users() {
 		this.users.sections = {'_':{'label':'', 'list':{}}};
 		this.users.sectionData = function(s) { return this.data; }
 
-		this.users.listValue = function(s, i, d) { return d['user']['firstname'] + ' ' + d['user']['lastname']; }
+		this.users.listValue = function(s, i, d) { return d.user.firstname + ' ' + d.user.lastname; }
 		this.users.listFn = function(s, i, d) { return 'M.startApp(\'ciniki.sysadmin.user\',null,\'M.ciniki_sysadmin_users.showUsers();\',\'mc\',{\'id\':\'' + d.user.id + '\'});'; }
 //		this.users.listFn = function(s, i, d) { return 'M.ciniki_sysadmin_users.showDetails(' + i + ');'; }
 		this.users.noData = function() { return 'ERROR - No sysadmins'; }
@@ -42,14 +42,16 @@ function ciniki_sysadmin_users() {
 		// we have the current data.  If the user switches businesses, then we
 		// want this data reloaded.
 		//
-		var rsp = M.api.getJSON('ciniki.users.getSysAdmins', {});
-		if( rsp['stat'] != 'ok' ) {
-			M.api.err(rsp);
-			return false;
-		}
-		this.users.data = rsp['users'];
-		this.users.refresh();
-		this.users.show(cb);
+		var rsp = M.api.getJSONCb('ciniki.users.getSysAdmins', {}, function(rsp) {
+			if( rsp.stat != 'ok' ) {
+				M.api.err(rsp);
+				return false;
+			}
+			var p = M.ciniki_sysadmin_users.users;
+			p.data = rsp.users;
+			p.refresh();
+			p.show(cb);
+		});
 	}
 
 	// 
@@ -57,22 +59,19 @@ function ciniki_sysadmin_users() {
 	//
 	this.add = function(data) {
 		var userID = 0;
-		if( data != null && data['id'] != null ) {
-			userID = data['id'];
+		if( data != null && data.id != null ) {
+			userID = data.id;
 		}
 
 		// FIXME: Add field for password, can only modify with password
 		if( userID > 0 ) {
-			var rsp = M.api.getJSON('ciniki.users.addSysAdmin', {'user_id':userID});
-			if( rsp['stat'] != 'ok' ) {
-				M.api.err(rsp);
-			}
-			this.loadData();
-			this.users.refresh();
+			var rsp = M.api.getJSONCb('ciniki.users.addSysAdmin', {'user_id':userID}, function(rsp) {
+				if( rsp.stat != 'ok' ) {
+					M.api.err(rsp);
+					return false;
+				}
+				M.ciniki_sysadmin_users.showUsers();
+			});
 		}
-
-		this.users.show();
-
-		return false;
 	}
 }

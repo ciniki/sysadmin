@@ -20,12 +20,12 @@ function ciniki_sysadmin_lockedusers() {
         this.users.cellValue = function(s, i, col, d) { 
 			if( col == 0 ) { return d.user.firstname + ' ' + d.user.lastname; }
 			else if( col == 1 ) {
-				var u = this.data[i]['user'];
+				var u = this.data[i].user;
 				var p = '';
 				var c = '';
-				if( (u['perms'] & 0x01) ) { p += c + 'sysadmin'; c = ', '; }
-				if( (u['perms'] & 0x02) ) { p += c + 'admin'; c = ', '; }
-				if( (u['perms'] & 0x04) ) { p += c + 'www'; c = ', '; }
+				if( (u.perms & 0x01) ) { p += c + 'sysadmin'; c = ', '; }
+				if( (u.perms & 0x02) ) { p += c + 'admin'; c = ', '; }
+				if( (u.perms & 0x04) ) { p += c + 'www'; c = ', '; }
 				return p;
 			}
 			return '';
@@ -46,19 +46,20 @@ function ciniki_sysadmin_lockedusers() {
             return false;
         }   
 		
-		this.users.cb = cb;
-        this.showUsers();
+        this.showUsers(cb);
     }   
 
-	this.showUsers = function() {
-		var rsp = M.api.getJSON('ciniki.users.getLockedUsers', {});
-		if( rsp['stat'] != 'ok' ) {
-			M.api.err(rsp);
-			return false;
-		}
-		this.users.data = rsp['users'];
-		this.users.refresh();
-		this.users.show();
+	this.showUsers = function(cb) {
+		var rsp = M.api.getJSONCb('ciniki.users.getLockedUsers', {}, function(rsp) {
+			if( rsp.stat != 'ok' ) {
+				M.api.err(rsp);
+				return false;
+			}
+			var p = M.ciniki_sysadmin_lockedusers.users;
+			p.data = rsp.users;
+			p.refresh();
+			p.show(cb);
+		});
 	}
 }
 

@@ -63,23 +63,25 @@ function ciniki_sysadmin_codeversions() {
 		//
 		// Load the data into the this.tables.data field
 		//
-		this.loadData();
-		this.modules.show(cb);
+		this.showVersions(cb);
 	}
 
-	this.loadData = function() {
+	this.showVersions = function(cb) {
 		//
 		// Get the detail for the user.  Do this for each request, to make sure
 		// we have the current data.  If the user switches businesses, then we
 		// want this data reloaded.
 		//
-		var rsp = M.api.getJSON('ciniki.core.codeVersions', {});
-		if( rsp['stat'] != 'ok' ) {
-			M.api.err(rsp);
-			return false;
-		}
-		var count = 0;
-		this.modules.data = {'package':rsp.package, 'modules':rsp.modules};
+		M.api.getJSONCb('ciniki.core.codeVersions', {}, function(rsp) {
+			if( rsp.stat != 'ok' ) {
+				M.api.err(rsp);
+				return false;
+			}
+			var p = M.ciniki_sysadmin_codeversions.modules;
+			p.data = {'package':rsp.package, 'modules':rsp.modules};
+			p.refresh();
+			p.show(cb);
+		});
 	}
 
 }

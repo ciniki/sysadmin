@@ -45,19 +45,20 @@ function ciniki_sysadmin_privilegedusers() {
             return false;
         }   
 	
-		this.users.cb = cb;
-        this.showUsers();
+        this.showUsers(cb);
     }   
 
-	this.showUsers = function() {
-		var rsp = M.api.getJSON('ciniki.users.getPrivilegedUsers', {});
-		if( rsp['stat'] != 'ok' ) {
-			M.api.err(rsp);
-			return false;
-		}
-		this.users.data = rsp.users;
-		this.users.refresh();
-		this.users.show();
+	this.showUsers = function(cb) {
+		var rsp = M.api.getJSONCb('ciniki.users.getPrivilegedUsers', {}, function(rsp) {
+			if( rsp.stat != 'ok' ) {
+				M.api.err(rsp);
+				return false;
+			}
+			var p = M.ciniki_sysadmin_privilegedusers.users;
+			p.data = rsp.users;
+			p.refresh();
+			p.show(cb);
+		});
 	}
 }
 

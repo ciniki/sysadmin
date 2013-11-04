@@ -18,13 +18,13 @@ function ciniki_sysadmin_userbusinesses() {
 			};
 		this.users.sectionData = function(s) { return this.data; }
         this.users.cellValue = function(s, i, col, d) { 
-			if( col == 0 ) { return this.data[i]['user']['firstname'] + ' ' + this.data[i]['user']['lastname']; }
+			if( col == 0 ) { return this.data[i].user.firstname + ' ' + this.data[i].user.lastname; }
 			else if( col == 1 ) {
-				var u = this.data[i]['user'];
+				var u = this.data[i].user;
 				var p = '';
 				var c = '';
-				for(j in u['businesses']) {
-					p += c + u['businesses'][j]['business']['name'];
+				for(j in u.businesses) {
+					p += c + u.businesses[j].business.name;
 					c = '<br/>';
 				}
 				return p;
@@ -47,19 +47,19 @@ function ciniki_sysadmin_userbusinesses() {
             return false;
         }   
 
-
-        this.users.cb = cb;
-		this.showUsers();
+		this.showUsers(cb);
     }   
 
-	this.showUsers = function() {
-		var rsp = M.api.getJSON('ciniki.businesses.getAllOwners', {});
-		if( rsp['stat'] != 'ok' ) {
-			M.api.err(rsp);
-			return false;
-		}
-		this.users.data = rsp.users;
-		this.users.refresh();
-		this.users.show();
+	this.showUsers = function(cb) {
+		var rsp = M.api.getJSONCb('ciniki.businesses.getAllOwners', {}, function(rsp) {
+			if( rsp.stat != 'ok' ) {
+				M.api.err(rsp);
+				return false;
+			}
+			var p = M.ciniki_sysadmin_userbusinesses.users;
+			p.data = rsp.users;
+			p.refresh();
+			p.show(cb);
+		});
 	}
 }

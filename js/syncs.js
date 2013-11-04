@@ -78,16 +78,17 @@ function ciniki_sysadmin_syncs() {
 		// 
 		// Get the sync information for this server and business
 		//
-		var rsp = M.api.getJSON('ciniki.core.syncInfo', {'business_id':M.curBusinessID});
-		if( rsp.stat != 'ok' ) {
-			M.api.err(rsp);
-			return false;
-		}
-		this.syncs.sections.info.list.name.value = rsp.name;
-		this.syncs.sections.synclist.data = rsp.syncs;
-
-		this.syncs.refresh();
-		this.syncs.show(cb);
+		var rsp = M.api.getJSONCb('ciniki.core.syncInfo', {'business_id':M.curBusinessID}, function(rsp) {
+			if( rsp.stat != 'ok' ) {
+				M.api.err(rsp);
+				return false;
+			}
+			var p = M.ciniki_sysadmin_syncs.syncs;
+			p.sections.info.list.name.value = rsp.name;
+			p.sections.synclist.data = rsp.syncs;
+			p.refresh();
+			p.show(cb);
+		});
 	}
 
 }

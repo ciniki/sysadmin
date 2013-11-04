@@ -7,12 +7,6 @@ function ciniki_sysadmin_businessusers() {
         this.businesses = new M.panel('Business Users',
             'ciniki_sysadmin_businessusers', 'businesses',
            	'mc', 'medium', 'sectioned', 'ciniki.sysadmin.business.users');
-//		this.businesses.sections = {
-//			'_':{'label':'', 'type':'simplegrid', 'num_cols':1, 
-//				'headerValues':['Business', 'Users'],
-//				'cellClasses':['multiline'],
-//				},
-//			};
 		this.businesses.sectionData = function(s) { return this.data[s]; }
         this.businesses.cellValue = function(s, i, j, d) { 
 			var c = '<span class="maintext">' + d.business.name + '</span><span class="subtext">';
@@ -24,14 +18,14 @@ function ciniki_sysadmin_businessusers() {
 			}
 			c += '</span>';
 			return c;
-			if( col == 0 ) { return d['business']['name']; }
+			if( col == 0 ) { return d.business.name; }
 			else if( col == 1 ) {
-				var b = this.data[i]['business'];
+				var b = this.data[i].business;
 				var p = '';
 				var c = '';
-				for(j in b['users']) {
-					p += c + b['users'][j]['user']['firstname']
-						+ ' ' + b['users'][j]['user']['lastname'];
+				for(j in b.users) {
+					p += c + b.users[j].user.firstname
+						+ ' ' + b.users[j].user.lastname;
 					c = '<br/>';
 				}
 				return p;
@@ -58,21 +52,22 @@ function ciniki_sysadmin_businessusers() {
     }   
 
 	this.showBusinesses = function(cb) {
-		var rsp = M.api.getJSON('ciniki.businesses.getAll', {});
-		if( rsp['stat'] != 'ok' ) {
-			M.api.err();
-			return false;
-		}
-		this.businesses.data = {};
-		this.businesses.sections = {};
-		for(i in rsp.categories) {
-			this.businesses.sections[i] = {'label':rsp.categories[i].category.name, 'type':'simplegrid', 'num_cols':1,
-				'cellClasses':['multiline'],
-				};
-			this.businesses.data[i] = rsp.categories[i].category.businesses;
-		}
-
-		this.businesses.refresh();
-		this.businesses.show(cb);
+		var rsp = M.api.getJSONCb('ciniki.businesses.getAll', {}, function(rsp) {
+			if( rsp.stat != 'ok' ) {
+				M.api.err();
+				return false;
+			}
+			var p = M.ciniki_sysadmin_businessusers.businesses;
+			p.data = {};
+			p.sections = {};
+			for(i in rsp.categories) {
+				p.sections[i] = {'label':rsp.categories[i].category.name, 'type':'simplegrid', 'num_cols':1,
+					'cellClasses':['multiline'],
+					};
+				p.data[i] = rsp.categories[i].category.businesses;
+			}
+			p.refresh();
+			p.show(cb);
+		});
 	}
 }
