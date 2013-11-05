@@ -96,13 +96,8 @@ function ciniki_sysadmin_business() {
 				}}
 			};
 		this.edit.fieldValue = function(s, i, d) { return this.data[i]; };
-		this.edit.fieldHistory = function(s, i) {
-			var rsp = M.api.getJSON('ciniki.businesses.getDetailHistory', {'business_id':M.ciniki_sysadmin_business.edit.business_id, 'field':i});
-			if( rsp.stat != 'ok' ) {
-				M.api.err(rsp);
-				return false;
-			}
-			return rsp;
+		this.edit.fieldHistoryArgs = function(s, i) {
+			return {'method':'ciniki.businesses.getDetailHistory', 'args':{'business_id':M.ciniki_sysadmin_business.edit.business_id, 'field':i}};
 		};
 		this.edit.liveSearchCb = function(s, i, value) {
 			if( i == 'business.category' ) {
