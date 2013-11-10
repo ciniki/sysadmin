@@ -95,7 +95,7 @@ function ciniki_sysadmin_dbversions() {
 				alert("Error: #" + rsp.err.code + ' - ' + rsp.err.msg);
 				return false;
 			}
-			M.ciniki_sysadmin_dbversion.showTables();
+			M.ciniki_sysadmin_dbversions.showTables();
 		});
 	}
 }
