@@ -28,12 +28,12 @@ function ciniki_sysadmin_main() {
 				'all':{'label':'All Users', 'fn':'M.startApp(\'ciniki.sysadmin.allusers\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
 				}},
 			'monitoring':{'label':'Monitoring', 'list':{
-				'errorlogs':{'label':'Error Logs', 'fn':'M.startApp(\'ciniki.monitoring.errors\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
-				'changelogs':{'label':'Change Logs', 'fn':'M.startApp(\'ciniki.monitoring.changelogs\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
-				'actionlogs':{'label':'Action Logs', 'fn':'M.startApp(\'ciniki.monitoring.actionlogs\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
-				'sessions':{'label':'Sessions', 'fn':'M.startApp(\'ciniki.monitoring.sessions\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
-				'authlog':{'label':'Auth Log', 'fn':'M.startApp(\'ciniki.monitoring.authlogs\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
-				'authfailures':{'label':'Auth Failures', 'fn':'M.startApp(\'ciniki.monitoring.authfailures\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
+				'errorlogs':{'label':'Error Logs', 'fn':'M.startApp(\'ciniki.sysadmin.errors\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
+				'changelogs':{'label':'Change Logs', 'fn':'M.startApp(\'ciniki.sysadmin.changelogs\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
+				'actionlogs':{'label':'Action Logs', 'fn':'M.startApp(\'ciniki.sysadmin.actionlogs\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
+				'sessions':{'label':'Sessions', 'fn':'M.startApp(\'ciniki.sysadmin.sessions\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
+				'authlog':{'label':'Auth Log', 'fn':'M.startApp(\'ciniki.sysadmin.authlogs\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
+				'authfailures':{'label':'Auth Failures', 'fn':'M.startApp(\'ciniki.sysadmin.authfailures\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
 				'fixhistory':{'label':'Fix User History', 'fn':'M.ciniki_sysadmin_main.fixuserhistory();'},
 				}},
 //			'billing':{'label':'Billing', 'list':{

@@ -128,7 +128,7 @@ function ciniki_sysadmin_user() {
 		//
 		this.actionlogs = new M.panel('Action Logs',
 			'ciniki_sysadmin_user', 'actionlogs',
-			'mc', 'wide', 'sectioned', 'ciniki.monitoring.actionlogs');
+			'mc', 'wide', 'sectioned', 'ciniki.sysadmin.actionlogs');
 		this.actionlogs.data = null;
 		this.actionlogs.dataOrder = 'reverse';		// Display the newest logs at the top
         this.actionlogs.sections = { 
