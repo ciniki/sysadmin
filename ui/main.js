@@ -44,6 +44,9 @@ function ciniki_sysadmin_main() {
 				'code':{'label':'Code Versions', 'fn':'M.startApp(\'ciniki.sysadmin.codeversions\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
 				'modules':{'label':'Module usage', 'fn':'M.startApp(\'ciniki.sysadmin.modules\',null,\'M.ciniki_sysadmin_main.menu.show();\');'},
 				}},
+			'migration':{'label':'Migration', 'list':{
+				'phonesmove':{'label':'Move Phones', 'fn':'M.ciniki_sysadmin_main.phonesmove();'},
+				}},
 //			'documentation':{'label':'Documentation', 'list':{
 //				'modules':{'label':'Modules', 'fn':'M.startApp(\'ciniki.documentation.modules\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
 //				'errorcodes':{'label':'Error Codes', 'fn':'M.startApp(\'ciniki.documentation.errorcodes\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
@@ -76,6 +79,16 @@ function ciniki_sysadmin_main() {
 
 	this.fixuserhistory = function() {
 		var rsp = M.api.getJSONCb('ciniki.users.historyFix', {}, function(rsp) {
+			if( rsp.stat != 'ok' ) {
+				M.api.err(rsp);
+				return false;
+			}
+			alert('done');
+		});
+	};
+
+	this.phonesmove = function() {
+		var rsp = M.api.getJSONCb('ciniki.customers.phonesMove', {}, function(rsp) {
 			if( rsp.stat != 'ok' ) {
 				M.api.err(rsp);
 				return false;
