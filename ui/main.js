@@ -47,7 +47,8 @@ function ciniki_sysadmin_main() {
 			'migration':{'label':'Migration', 'list':{
 //				'infoimport':{'label':'ciniki.info Import', 'fn':'M.ciniki_sysadmin_main.infoimport();'},
 //				'phonesmove':{'label':'Move Phones', 'fn':'M.ciniki_sysadmin_main.phonesmove();'},
-				'upgradegallery':{'label':'Upgrade Gallery', 'fn':'M.ciniki_sysadmin_main.upgradeGallery();'},
+//				'upgradegallery':{'label':'Upgrade Gallery', 'fn':'M.ciniki_sysadmin_main.upgradeGallery();'},
+				'upgradeNewsletters':{'label':'Upgrade Newsletters', 'fn':'M.ciniki_sysadmin_main.upgradeNewsletters();'},
 				}},
 //			'documentation':{'label':'Documentation', 'list':{
 //				'modules':{'label':'Modules', 'fn':'M.startApp(\'ciniki.documentation.modules\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
@@ -91,6 +92,16 @@ function ciniki_sysadmin_main() {
 
 	this.upgradeGallery = function() {
 		var rsp = M.api.getJSONCb('ciniki.gallery.upgradeAlbums', {}, function(rsp) {
+			if( rsp.stat != 'ok' ) {
+				M.api.err(rsp);
+				return false;
+			}
+			alert('done');
+		});
+	};
+
+	this.upgradeNewsletters = function() {
+		var rsp = M.api.getJSONCb('ciniki.newsletters.movetoStorage', {}, function(rsp) {
 			if( rsp.stat != 'ok' ) {
 				M.api.err(rsp);
 				return false;
