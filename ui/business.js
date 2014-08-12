@@ -225,7 +225,7 @@ function ciniki_sysadmin_business() {
 							M.api.err(rsp); 
 							return false;
 						}
-						M.ciniki_sysadmin_business.showDetails();
+						M.ciniki_sysadmin_business.details.close();
 					});
 			}
 		}
