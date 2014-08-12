@@ -165,6 +165,9 @@ function ciniki_sysadmin_business() {
 				p.sections._buttons.buttons._delete = {'label':'Delete Business', 'fn':'M.ciniki_sysadmin_business.delete();'};
 			} else if( rsp.business.business_status == 50 ) {
 				p.sections._buttons.buttons._suspend = {'label':'Activate Business', 'fn':'M.ciniki_sysadmin_business.activate();'};
+			} else if( rsp.business.business_status == 60 ) {
+				p.sections._buttons.buttons._undelete = {'label':'Activate Business', 'fn':'M.ciniki_sysadmin_business.activate();'};
+				p.sections._buttons.buttons._purge = {'label':'Purge Business', 'fn':'M.ciniki_sysadmin_business.purge();'};
 			}
 
 			p.sections.subscription.list.trial.visible = 'no';
@@ -211,6 +214,21 @@ function ciniki_sysadmin_business() {
 				}
 				M.ciniki_sysadmin_business.showDetails();
 			});
+	}
+
+	this.purge = function() {
+		if( confirm('Are you sure you want to purge this business?  All information will be removed!') == true ) {
+			if( confirm('Please confirm deletion') ) {
+				var rsp = M.api.getJSONCb('ciniki.businesses.purge', 
+					{'business_id':M.ciniki_sysadmin_business.details.business_id}, function(rsp) {
+						if( rsp.stat != 'ok' ) {
+							M.api.err(rsp); 
+							return false;
+						}
+						M.ciniki_sysadmin_business.showDetails();
+					});
+			}
+		}
 	}
 
 	this.showEdit = function(cb, bid) {
