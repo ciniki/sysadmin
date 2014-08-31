@@ -48,7 +48,8 @@ function ciniki_sysadmin_main() {
 //				'infoimport':{'label':'ciniki.info Import', 'fn':'M.ciniki_sysadmin_main.infoimport();'},
 //				'phonesmove':{'label':'Move Phones', 'fn':'M.ciniki_sysadmin_main.phonesmove();'},
 //				'upgradegallery':{'label':'Upgrade Gallery', 'fn':'M.ciniki_sysadmin_main.upgradeGallery();'},
-				'upgradeNewsletters':{'label':'Upgrade Newsletters', 'fn':'M.ciniki_sysadmin_main.upgradeNewsletters();'},
+//				'upgradeNewsletters':{'label':'Upgrade Newsletters', 'fn':'M.ciniki_sysadmin_main.upgradeNewsletters();'},
+				'upgradeLinks':{'label':'Upgrade Links', 'fn':'M.ciniki_sysadmin_main.upgradeLinks();'},
 				}},
 //			'documentation':{'label':'Documentation', 'list':{
 //				'modules':{'label':'Modules', 'fn':'M.startApp(\'ciniki.documentation.modules\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
@@ -100,15 +101,25 @@ function ciniki_sysadmin_main() {
 		});
 	};
 
-	this.upgradeNewsletters = function() {
-		var rsp = M.api.getJSONCb('ciniki.newsletters.movetoStorage', {}, function(rsp) {
+	this.upgradeLinks = function() {
+		var rsp = M.api.getJSONCb('ciniki.links.upgradeCategories', {}, function(rsp) {
 			if( rsp.stat != 'ok' ) {
 				M.api.err(rsp);
 				return false;
 			}
-			alert('done');
+			alert('done, added ' + rsp.added + ' tags');
 		});
 	};
+
+//	this.upgradeNewsletters = function() {
+//		var rsp = M.api.getJSONCb('ciniki.newsletters.movetoStorage', {}, function(rsp) {
+//			if( rsp.stat != 'ok' ) {
+//				M.api.err(rsp);
+//				return false;
+//			}
+//			alert('done');
+//		});
+//	};
 
 //	this.phonesmove = function() {
 //		var rsp = M.api.getJSONCb('ciniki.customers.phonesMove', {}, function(rsp) {
