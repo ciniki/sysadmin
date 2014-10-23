@@ -10,7 +10,7 @@ function ciniki_sysadmin_billing() {
 		//
         this.businesses = new M.panel('Billing',
             'ciniki_sysadmin_billing', 'businesses',
-           	'mc', 'medium', 'sectioned', 'ciniki.sysadmin.billing.businesses');
+           	'mc', 'medium mediumflex', 'sectioned', 'ciniki.sysadmin.billing.businesses');
 		this.businesses.sections = {};
 		this.businesses.sectionData = function(s) { return this.data[s].businesses; }
         this.businesses.cellValue = function(s, i, j, d) { 
