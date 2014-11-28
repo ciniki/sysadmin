@@ -7,16 +7,38 @@ function ciniki_sysadmin_allusers() {
         //  
         // Create the new panel
         //  
-        this.users = new M.panel('Privileged Users',
+        this.users = new M.panel('All Users',
             'ciniki_sysadmin_allusers', 'users',
             'mc', 'medium', 'sectioned', 'ciniki.sysadmin.allusers.users');
 		this.users.sections = {
+			'search':{'label':'', 'type':'livesearchgrid', 'livesearchcols':2,
+				'cellClasses':['multiline', 'multiline'],
+				'noData':'No users found',
+				},
 			'_':{'label':'', 'type':'simplegrid', 'num_cols':4, 'sortable':'yes',
 				'headerValues':['First', 'Last', 'Status', 'Privileges'],
 				'sortTypes':['text','text','text','text']
 				},
 			};
 		this.users.sectionData = function(s) { return this.data; }
+		this.users.liveSearchCb = function(s, i, value) {
+			if( s == 'search' && value != '' ) {
+				M.api.getJSONBgCb('ciniki.users.search', {'start_needle':value}, function(rsp) {
+					M.ciniki_sysadmin_allusers.users.liveSearchShow('search', null, M.gE(M.ciniki_sysadmin_allusers.users.panelUID + '_' + s), rsp.users);
+				});
+			}
+		};
+		this.users.liveSearchResultValue = function(s, f, i, j, d) {
+			if( s == 'search' ) {
+				switch(j) {
+					case 0: return '<span class="maintext">' + d.user.firstname + '</span><span class="subtext">' + d.user.lastname + '</span>';
+					case 1: return '<span class="maintext">' + d.user.username + ' <span class="subdue">[' + d.user.display_name + ']</span></span><span class="subtext">' + d.user.email + '</span>';
+				}
+			}
+		};
+		this.users.liveSearchResultRowFn = function(s, f, i, j, d) {
+			return 'M.startApp(\'ciniki.sysadmin.user\',null,\'M.ciniki_sysadmin_allusers.showUsers();\',\'mc\',{\'id\':\'' + d.user.id + '\'});';
+		};
         this.users.cellValue = function(s, i, j, d) { 
 			if( j == 0 ) { return d.user.firstname; }
 			else if( j == 1 ) { return d.user.lastname; }
