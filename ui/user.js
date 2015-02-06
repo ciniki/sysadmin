@@ -97,6 +97,7 @@ function ciniki_sysadmin_user() {
 			if( s == 'authlogs' ) { return 'No auth logs'; }
 			return 'No businesses found'; 
 		};
+		this.details.addButton('edit', 'Edit', 'M.ciniki_sysadmin_user.editUser(\'M.ciniki_sysadmin_user.showDetails();\', M.ciniki_sysadmin_user.details.user_id);');
         this.details.addClose('Back');
 
 		//
@@ -147,6 +148,42 @@ function ciniki_sysadmin_user() {
 //		this.actionlogs.addButton('update', 'Update', 'M.ciniki_monitoring_actionlogs.update();');
 //		this.actionlogs.addButton('clear', 'Clear', 'M.ciniki_monitoring_actionlogs.clear();');
 		this.actionlogs.addClose('Close');
+
+		//
+		// The edit panel
+		//
+		this.edit = new M.panel('Edit',
+			'ciniki_sysadmin_user', 'edit', 
+			'mc', 'medium', 'sectioned', 'ciniki.sysadmin.user.edit');
+		this.edit.user_id = 0;
+		this.edit.data = null;
+		this.edit.sections = {
+			'name':{'label':'Contact', 'fields':{
+				'firstname':{'label':'First', 'type':'text'},
+				'lastname':{'label':'Last', 'type':'text'},
+				'display_name':{'label':'Display', 'type':'text'},
+				}},
+			'login':{'label':'Login', 'fields':{
+				'email':{'label':'Email', 'type':'text'},
+				'username':{'label':'Username', 'type':'text'},
+				'timeout':{'label':'Timeout', 'size':'small', 'type':'text'},
+				}},
+			'details':{'label':'Settings', 'fields':{
+				'ui-mode-guided':{'label':'Guided Mode', 'type':'toggle', 'toggles':{'no':'Off', 'yes':'On'}},
+				'ui-mode-xhelp':{'label':'Extra Help', 'type':'toggle', 'toggles':{'no':'Off', 'yes':'On'}},
+				}},
+		};
+		this.edit.sectionData = function(s) { return this.data; }
+		this.edit.fieldValue = function(s, i, d) { 
+			if( s == 'details' ) { return this.data.details[i]; }
+			return this.data[i]; 
+		}
+		this.edit.fieldHistoryArgs = function(s, i) {
+			return {'method':'ciniki.users.getDetailHistory', 'args':{'user_id':this.user_id, 'field':i}};
+		}
+		this.edit.addButton('save', 'Save', 'M.ciniki_sysadmin_user.saveUser();');
+		this.edit.addClose('Cancel');
+
     }   
 
 	this.start = function(cb, appPrefix, aG) {
@@ -173,9 +210,7 @@ function ciniki_sysadmin_user() {
     }   
 
     this.showDetails = function(cb, id) {
-		if( id != null ) {
-			this.details.user_id = id;
-		}
+		if( id != null ) { this.details.user_id = id; }
 		// 
 		// Setup the data for the details form
 		//
@@ -353,4 +388,31 @@ function ciniki_sysadmin_user() {
 				p.show(cb);
 			});
 	}
+
+	this.editUser = function(cb, uid) {
+		if( uid != null ) { this.edit.user_id = uid; }
+		M.api.getJSONCb('ciniki.users.get', {'user_id':this.edit.user_id}, function(rsp) {
+			if( rsp.stat != 'ok' ) {
+				M.api.err(rsp);
+				return false;
+			}
+			var p = M.ciniki_sysadmin_user.edit;
+			p.data = rsp.user;
+			p.refresh();
+			p.show(cb);
+			});
+	}
+
+	this.saveUser = function() {
+		var c = this.edit.serializeForm('no');
+		if( c != '' ) {
+			M.api.postJSONCb('ciniki.users.userUpdate', {'user_id':this.edit.user_id}, c, function(rsp) {
+				if( rsp.stat != 'ok' ) {
+					M.api.err(rsp);
+					return false;
+				}
+				M.ciniki_sysadmin_user.edit.close();
+			});
+		}
+	};
 }
