@@ -11,9 +11,9 @@ function ciniki_sysadmin_main() {
 		//
 		this.menu = new M.panel('System Admin',
 			'ciniki_sysadmin_main', 'menu',
-			'mc', 'narrow', 'sectioned', 'ciniki.sysadmin.main.menu');
+			'mc', 'medium narrowaside', 'sectioned', 'ciniki.sysadmin.main.menu');
 		this.menu.sections = {
-			'businesses':{'label':'Businesses', 'list':{
+			'businesses':{'label':'Businesses', 'aside':'yes', 'list':{
 				'add':{'label':'Add Business', 'fn':'M.startApp(\'ciniki.businesses.add\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
 				'owners':{'label':'Owners & Employees', 'fn':'M.startApp(\'ciniki.sysadmin.userbusinesses\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
 				'businesses':{'label':'Businesses', 'fn':'M.startApp(\'ciniki.sysadmin.businessusers\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
@@ -21,7 +21,7 @@ function ciniki_sysadmin_main() {
 				'syncs':{'label':'Syncronizations', 'fn':'M.startApp(\'ciniki.sysadmin.syncs\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
 				'domains':{'label':'Domains', 'fn':'M.startApp(\'ciniki.sysadmin.domains\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
 				}},
-			'users':{'label':'Users', 'list':{
+			'users':{'label':'Users', 'aside':'yes', 'list':{
 				'sysadmins':{'label':'Sys Admins', 'fn':'M.startApp(\'ciniki.sysadmin.users\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
 				'privileged':{'label':'Privileged Users', 'fn':'M.startApp(\'ciniki.sysadmin.privilegedusers\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
 				'locked':{'label':'Locked Users', 'fn':'M.startApp(\'ciniki.sysadmin.lockedusers\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
