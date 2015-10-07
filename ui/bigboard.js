@@ -276,7 +276,6 @@ function ciniki_sysadmin_bigboard() {
 				}
 				var p = M.ciniki_sysadmin_bigboard.main;
 				p.data.sessions = rsp.sessions;
-				console.log('bigboard');
 				p.refreshSection('sessions');
 			});
 		
@@ -286,7 +285,6 @@ function ciniki_sysadmin_bigboard() {
 					M.api.err(rsp);
 					return false;
 				}
-				console.log('syncInfo');
 				var p = M.ciniki_sysadmin_bigboard.main;
 				if( rsp.syncs != null && rsp.syncs.length > 0 ) {
 					for(i in rsp.syncs) {
@@ -307,7 +305,6 @@ function ciniki_sysadmin_bigboard() {
 					M.api.err(rsp);
 					return false;
 				}
-				console.log('domainExpires');
 				var p = M.ciniki_sysadmin_bigboard.main;
 				if( rsp.domains != null && rsp.domains.length > 0 ) {
 					p.data.expiringdomains = rsp.domains;
