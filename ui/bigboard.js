@@ -25,7 +25,7 @@ function ciniki_sysadmin_bigboard() {
 			'ciniki_sysadmin_bigboard', 'main',
 			appPrefix, 'medium', 'sectioned', 'ciniki.sysadmin.bigboard.main');
 		this.main.paneltab = 'summary';
-		this.main.data = {};
+		this.main.data = {'problemsyncs':{}, 'expiringdomain':{}, 'sessions':{}};
 		this.main.dataOrder = 'reverse';		// Display the newest sessions at the top
 		this.main.tabs = {'label':'', 'type':'paneltabs', 'selected':'summary', 'tabs':{
 			'summary':{'label':'Summary', 'fn':'M.ciniki_sysadmin_bigboard.showSummary();'},
@@ -265,25 +265,29 @@ function ciniki_sysadmin_bigboard() {
 				'bugs':{},
 				'errors':{},
 				};
+			this.main.refresh();
+			this.main.show();
 
 			// Load session info
-			M.startLoad();
-			var rsp = M.api.getJSONCb('ciniki.core.bigboard', {'last_timestamp':this.lastTimestamp}, function(rsp) {
+			M.api.getJSONBgCb('ciniki.core.bigboard', {'last_timestamp':this.lastTimestamp}, function(rsp) {
 				if( rsp.stat != 'ok' ) {
-					M.stopLoad();
 					M.api.err(rsp);
 					return false;
 				}
 				var p = M.ciniki_sysadmin_bigboard.main;
 				p.data.sessions = rsp.sessions;
-
-				// Get sync info
-				var rsp = M.api.getJSON('ciniki.core.syncInfo', {});
+				console.log('bigboard');
+				p.refreshSection('sessions');
+			});
+		
+			// Get sync info
+			M.api.getJSONCb('ciniki.core.syncInfo', {}, function(rsp) {
 				if( rsp.stat != 'ok' ) {
-					M.stopLoad();
 					M.api.err(rsp);
 					return false;
 				}
+				console.log('syncInfo');
+				var p = M.ciniki_sysadmin_bigboard.main;
 				if( rsp.syncs != null && rsp.syncs.length > 0 ) {
 					for(i in rsp.syncs) {
 						if( rsp.syncs[i].sync.sync_status != 'ok' ) {
@@ -294,23 +298,24 @@ function ciniki_sysadmin_bigboard() {
 				} else {
 					p.sections.problemsyncs.visible = 'no';
 				}
+				p.refreshSection('problemsyncs');
+			});
 				
-				// Get expiring domains
-				var rsp = M.api.getJSON('ciniki.businesses.domainExpiries', {});
+			// Get expiring domains
+			M.api.getJSONCb('ciniki.businesses.domainExpiries', {}, function(rsp) {
 				if( rsp.stat != 'ok' ) {
-					M.stopLoad();
 					M.api.err(rsp);
 					return false;
 				}
+				console.log('domainExpires');
+				var p = M.ciniki_sysadmin_bigboard.main;
 				if( rsp.domains != null && rsp.domains.length > 0 ) {
 					p.data.expiringdomains = rsp.domains;
 					p.sections.expiringdomains.visible = 'yes';
 				} else {
 					p.sections.expiringdomains.visible = 'no';
 				}
-				M.stopLoad();
-				p.refresh();
-				p.show();
+				p.refreshSection('expiringdomains');
 			});
 		} else if( this.main.paneltab == 'syncs' ) {
 			var rsp = M.api.getJSONCb('ciniki.core.syncInfo', {}, function(rsp) {
