@@ -43,6 +43,7 @@ function ciniki_sysadmin_bigboard() {
 				'type':'simplegrid', 'num_cols':4,
 				'headerValues':['Business','Inc', 'Partial', 'Full'],
 				'cellClasses':['multiline', 'multiline', 'multiline', 'multiline'],
+				'noData':'No syncs',
             },
             'expiringdomains':{'label':'Expiring Domains', 'visible':'yes', 
 				'type':'simplegrid', 'num_cols':3,
@@ -65,6 +66,7 @@ function ciniki_sysadmin_bigboard() {
             'syncs':{'label':'', 'type':'simplegrid', 'num_cols':5,
                 'headerValues':['Business','Type', 'Inc', 'Partial', 'Full'],
 				'cellClasses':['multiline', 'multiline', 'multiline', 'multiline', 'multiline'],
+				'noData':'No syncs',
             },
 		};
 		this.main.tab_sections.auths = {
@@ -316,9 +318,6 @@ function ciniki_sysadmin_bigboard() {
 							p.data.problemsyncs[i] = rsp.syncs[i];
 						}
 					}
-					p.sections.problemsyncs.visible = 'yes';
-				} else {
-					p.sections.problemsyncs.visible = 'no';
 				}
 				p.refreshSection('problemsyncs');
 			});
