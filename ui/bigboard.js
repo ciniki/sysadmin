@@ -271,6 +271,7 @@ function ciniki_sysadmin_bigboard() {
 //		this.main.addButton('update', 'Update', 'M.ciniki_sysadmin_sessions.update();');
 //		this.main.addButton('clear', 'Clear', 'M.ciniki_sysadmin_sessions.clear();');
 		this.main.addClose('Close');
+		this.main.addButton('refresh', 'Refresh', 'M.ciniki_sysadmin_bigboard.update();');
 		this.main.show(cb);
 
 		// Reset the timestamp so all the logs are loaded
