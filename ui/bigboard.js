@@ -32,6 +32,7 @@ function ciniki_sysadmin_bigboard() {
 			'syncs':{'label':'Syncs', 'fn':'M.ciniki_sysadmin_bigboard.showSyncs();'},
 			'auths':{'label':'Auths', 'fn':'M.ciniki_sysadmin_bigboard.showAuths();'},
 			'activeusers':{'label':'Users', 'fn':'M.ciniki_sysadmin_bigboard.showActiveUsers();'},
+			'mail':{'label':'Mail', 'fn':'M.ciniki_sysadmin_bigboard.showMail();'},
 //			'bugs':{'label':'Bugs', 'fn':'M.ciniki_sysadmin_bigboard.showBugs();'},
 			'errors':{'label':'Errors', 'fn':'M.ciniki_sysadmin_bigboard.showErrors();'},
 			}};
@@ -47,6 +48,12 @@ function ciniki_sysadmin_bigboard() {
 				'type':'simplegrid', 'num_cols':3,
 				'headerValues':['Business','Domain','Expiry'],
 				'cellClasses':['multiline', 'multiline', 'multiline'],
+            },
+            'mail':{'label':'Mail Stats', 'visible':'yes', 'type':'simplegrid', 'num_cols':6,
+                'headerValues':['Business','Pending','Queued','QFail', 'Sending','Failed'],
+				'cellClasses':['','',''],
+				'dataMaps':[0,7,10,15,20,50],
+				'noData':'No mail found',
             },
             'sessions':{'label':'Sessions', 'type':'simplegrid', 'num_cols':2,
                 'headerValues':['User','Application'],
@@ -80,6 +87,15 @@ function ciniki_sysadmin_bigboard() {
                 'headerValues':['','ID','Subject'],
 				'cellClasses':['','multiline','multiline'],
 				'noData':'No bugs found',
+            },  
+		};
+		this.main.tab_sections.mail = {
+			'tabs':this.main.tabs,
+            'mail':{'label':'', 'type':'simplegrid', 'num_cols':6,
+                'headerValues':['Business','Pending','Queued','QFail', 'Sending','Failed'],
+				'cellClasses':['','',''],
+				'dataMaps':[0,7,10,15,20,50],
+				'noData':'No mail found',
             },  
 		};
 		this.main.tab_sections.errors = {
@@ -167,6 +183,14 @@ function ciniki_sysadmin_bigboard() {
 					case 1: return '<span class=\'maintext\'>' + d.error.method + '</span><span class=\'subtext\'>' + d.error.session_key + '</span>';
 					case 2: return '<span class=\'maintext\'>' + d.error.log_date + '</span><span class=\'subtext\'>' + d.error.age + ' ago</span>';
 				}
+			} else if( s == 'mail' ) {
+				if( j == 0 ) { return d.messages.name; }
+				for(var k in d.messages.status) {
+					if( d.messages.status[k].status.status == this.sections[s].dataMaps[j] ) {
+						return d.messages.status[k].status.num_messages;
+					}
+				}
+				return '';
 			}
 		}
 		this.main.cellFn = function(s, i, j, d) {
@@ -280,7 +304,7 @@ function ciniki_sysadmin_bigboard() {
 			});
 		
 			// Get sync info
-			M.api.getJSONCb('ciniki.core.syncInfo', {}, function(rsp) {
+			M.api.getJSONBgCb('ciniki.core.syncInfo', {}, function(rsp) {
 				if( rsp.stat != 'ok' ) {
 					M.api.err(rsp);
 					return false;
@@ -299,8 +323,20 @@ function ciniki_sysadmin_bigboard() {
 				p.refreshSection('problemsyncs');
 			});
 				
+			// Get mail status
+			M.api.getJSONBgCb('ciniki.sysadmin.mailStats', {}, function(rsp) {
+				if( rsp.stat != 'ok' ) {
+					M.api.err(rsp);
+					return false;
+				}
+				var p = M.ciniki_sysadmin_bigboard.main;
+				if( rsp.mail != null && rsp.mail.length > 0 ) {
+					p.data.mail = rsp.mail;
+				}
+				p.refreshSection('mail');
+			});
 			// Get expiring domains
-			M.api.getJSONCb('ciniki.businesses.domainExpiries', {}, function(rsp) {
+			M.api.getJSONBgCb('ciniki.businesses.domainExpiries', {}, function(rsp) {
 				if( rsp.stat != 'ok' ) {
 					M.api.err(rsp);
 					return false;
@@ -380,6 +416,19 @@ function ciniki_sysadmin_bigboard() {
 						p.show();
 					}
 				});
+		} else if( this.main.paneltab == 'mail' ) {
+			var rsp = M.api.getJSONCb('ciniki.sysadmin.mailStats', {}, function(rsp) {
+				if( rsp.stat != 'ok' ) {
+					M.api.err(rsp);
+					return false;
+				}
+				var p = M.ciniki_sysadmin_bigboard.main;
+				p.data = {'mail':rsp.mail};
+				p.sections = p.tab_sections.mail;
+				p.sections.tabs.selected = 'mail';
+				p.refresh();
+				p.show();
+			});
 		} else if( this.main.paneltab == 'errors' ) {
 			var rsp = M.api.getJSONCb('ciniki.core.errorLogList', {}, function(rsp) {
 				if( rsp.stat != 'ok' ) {
@@ -421,6 +470,11 @@ function ciniki_sysadmin_bigboard() {
 
 	this.showBugs = function() {
 		this.main.paneltab = 'bugs';
+		this.update();
+	};
+
+	this.showMail = function() {
+		this.main.paneltab = 'mail';
 		this.update();
 	};
 
