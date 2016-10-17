@@ -40,7 +40,6 @@ function ciniki_sysadmin_billing() {
             return '';
         };
         this.businesses.rowFn = function(s, i, d) { 
-//          return 'M.startApp(\'ciniki.sysadmin.business\',null,\'M.ciniki_sysadmin_billing.showBusinesses();\',\'mc\',{\'id\':\'' + d.business.id + '\'});'; 
             return 'M.startApp(\'ciniki.businesses.billing\',null,\'M.ciniki_sysadmin_billing.showBusinesses();\',\'mc\',{\'business_id\':\'' + d.business.id + '\'});'; 
         };
         this.businesses.noData = function() { return 'ERROR - No sysadmins'; }
