@@ -3,24 +3,35 @@
 function ciniki_sysadmin_users() {
     this.users = null;
 
-    this.init = function() {
-        //
-        // Create the new panel
-        //
-        this.users = new M.panel('Sys Admins',
-            'ciniki_sysadmin_users', 'users',
-            'mc', 'medium', 'sectioned', 'ciniki.sysadmin.users');
-        this.users.sections = {'_':{'label':'', 'list':{}}};
-        this.users.sectionData = function(s) { return this.data; }
+    //
+    // Create the new panel
+    //
+    this.users = new M.panel('Sys Admins', 'ciniki_sysadmin_users', 'users', 'mc', 'medium', 'sectioned', 'ciniki.sysadmin.users');
+    this.users.sections = {'_':{'label':'', 'list':{}}};
+    this.users.sectionData = function(s) { return this.data; }
 
-        this.users.listValue = function(s, i, d) { return d.user.firstname + ' ' + d.user.lastname; }
-        this.users.listFn = function(s, i, d) { return 'M.startApp(\'ciniki.sysadmin.user\',null,\'M.ciniki_sysadmin_users.showUsers();\',\'mc\',{\'id\':\'' + d.user.id + '\'});'; }
-//      this.users.listFn = function(s, i, d) { return 'M.ciniki_sysadmin_users.showDetails(' + i + ');'; }
-        this.users.noData = function() { return 'ERROR - No sysadmins'; }
-        this.users.addButton('add', 'Add', 'M.startModalApp(\'ciniki.users.add\', null, \'M.ciniki_sysadmin_users.add(data);\');');
-        this.users.addClose('Back');
-
+    this.users.listValue = function(s, i, d) { return d.user.firstname + ' ' + d.user.lastname; }
+    this.users.listFn = function(s, i, d) { return 'M.startApp(\'ciniki.sysadmin.user\',null,\'M.ciniki_sysadmin_users.users.open();\',\'mc\',{\'id\':\'' + d.user.id + '\'});'; }
+    this.users.noData = function() { return 'ERROR - No users'; }
+    this.users.open = function(cb) {
+        //
+        // Get the detail for the user.  Do this for each request, to make sure
+        // we have the current data.  If the user switches businesses, then we
+        // want this data reloaded.
+        //
+        M.api.getJSONCb('ciniki.users.getSysAdmins', {}, function(rsp) {
+            if( rsp.stat != 'ok' ) {
+                M.api.err(rsp);
+                return false;
+            }
+            var p = M.ciniki_sysadmin_users.users;
+            p.data = rsp.users;
+            p.refresh();
+            p.show(cb);
+        });
     }
+    this.users.addButton('add', 'Add', 'M.startModalApp(\'ciniki.users.add\', null, \'M.ciniki_sysadmin_users.add(data);\');');
+    this.users.addClose('Back');
 
     this.start = function(cb, appPrefix) {
         //
@@ -33,25 +44,7 @@ function ciniki_sysadmin_users() {
             return false;
         } 
 
-        this.showUsers(cb);
-    }
-
-    this.showUsers = function(cb) {
-        //
-        // Get the detail for the user.  Do this for each request, to make sure
-        // we have the current data.  If the user switches businesses, then we
-        // want this data reloaded.
-        //
-        var rsp = M.api.getJSONCb('ciniki.users.getSysAdmins', {}, function(rsp) {
-            if( rsp.stat != 'ok' ) {
-                M.api.err(rsp);
-                return false;
-            }
-            var p = M.ciniki_sysadmin_users.users;
-            p.data = rsp.users;
-            p.refresh();
-            p.show(cb);
-        });
+        this.users.open(cb);
     }
 
     // 
@@ -65,7 +58,7 @@ function ciniki_sysadmin_users() {
 
         // FIXME: Add field for password, can only modify with password
         if( userID > 0 ) {
-            var rsp = M.api.getJSONCb('ciniki.users.addSysAdmin', {'user_id':userID}, function(rsp) {
+            M.api.getJSONCb('ciniki.users.addSysAdmin', {'user_id':userID}, function(rsp) {
                 if( rsp.stat != 'ok' ) {
                     M.api.err(rsp);
                     return false;
