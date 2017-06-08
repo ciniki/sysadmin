@@ -70,7 +70,7 @@ function ciniki_sysadmin_businessusers() {
                 p.sections[(i+1)] = {'label':rsp.categories[i].category.name, 'type':'simplegrid', 'num_cols':1,
                     'cellClasses':['multiline'],
                     };
-                p.data[i] = rsp.categories[i].category.businesses;
+                p.data[(i+1)] = rsp.categories[i].category.businesses;
             }
             p.refresh();
             p.show(cb);
