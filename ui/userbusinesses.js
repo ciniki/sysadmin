@@ -1,6 +1,6 @@
 //
 //
-function ciniki_sysadmin_userbusinesses() {
+function ciniki_sysadmin_usertenants() {
     this.users = null;
     this.details = null;
 
@@ -8,12 +8,12 @@ function ciniki_sysadmin_userbusinesses() {
         //  
         // Create the new panel
         //  
-        this.users = new M.panel('Business Users',
-            'ciniki_sysadmin_userbusinesses', 'users',
-            'mc', 'medium', 'sectioned', 'ciniki.sysadmin.users.businesses');
+        this.users = new M.panel('Tenant Users',
+            'ciniki_sysadmin_usertenants', 'users',
+            'mc', 'medium', 'sectioned', 'ciniki.sysadmin.users.tenants');
         this.users.sections = {
             '_':{'label':'', 'type':'simplegrid', 'num_cols':2, 
-                'headerValues':['Name', 'Businesses'],
+                'headerValues':['Name', 'Tenants'],
                 },
             };
         this.users.sectionData = function(s) { return this.data; }
@@ -23,15 +23,15 @@ function ciniki_sysadmin_userbusinesses() {
                 var u = this.data[i].user;
                 var p = '';
                 var c = '';
-                for(j in u.businesses) {
-                    p += c + u.businesses[j].business.name;
+                for(j in u.tenants) {
+                    p += c + u.tenants[j].tenant.name;
                     c = '<br/>';
                 }
                 return p;
             }
             return '';
         }
-        this.users.rowFn = function(s, i, d) { return 'M.startApp(\'ciniki.sysadmin.user\',null,\'M.ciniki_sysadmin_userbusinesses.showUsers();\',\'mc\',{\'id\':\'' + d.user.id + '\'});'; }
+        this.users.rowFn = function(s, i, d) { return 'M.startApp(\'ciniki.sysadmin.user\',null,\'M.ciniki_sysadmin_usertenants.showUsers();\',\'mc\',{\'id\':\'' + d.user.id + '\'});'; }
         this.users.noData = function() { return 'ERROR - users'; }
         this.users.addClose('Back');
     }   
@@ -41,7 +41,7 @@ function ciniki_sysadmin_userbusinesses() {
         // Create the app container if it doesn't exist, and clear it out 
         // if it does exist.
         //  
-        var appContainer = M.createContainer(appPrefix, 'ciniki_sysadmin_userbusinesses', 'yes');
+        var appContainer = M.createContainer(appPrefix, 'ciniki_sysadmin_usertenants', 'yes');
         if( appContainer == null ) { 
             alert('App Error');
             return false;
@@ -51,12 +51,12 @@ function ciniki_sysadmin_userbusinesses() {
     }   
 
     this.showUsers = function(cb) {
-        var rsp = M.api.getJSONCb('ciniki.businesses.getAllOwners', {}, function(rsp) {
+        var rsp = M.api.getJSONCb('ciniki.tenants.getAllOwners', {}, function(rsp) {
             if( rsp.stat != 'ok' ) {
                 M.api.err(rsp);
                 return false;
             }
-            var p = M.ciniki_sysadmin_userbusinesses.users;
+            var p = M.ciniki_sysadmin_usertenants.users;
             p.data = rsp.users;
             p.refresh();
             p.show(cb);

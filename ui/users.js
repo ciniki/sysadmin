@@ -16,7 +16,7 @@ function ciniki_sysadmin_users() {
     this.users.open = function(cb) {
         //
         // Get the detail for the user.  Do this for each request, to make sure
-        // we have the current data.  If the user switches businesses, then we
+        // we have the current data.  If the user switches tenants, then we
         // want this data reloaded.
         //
         M.api.getJSONCb('ciniki.users.getSysAdmins', {}, function(rsp) {

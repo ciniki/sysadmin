@@ -41,17 +41,17 @@ function ciniki_sysadmin_bigboard() {
             'tabs':this.main.tabs,
             'problemsyncs':{'label':'Problem Syncs', 'visible':'yes', 
                 'type':'simplegrid', 'num_cols':4,
-                'headerValues':['Business','Inc', 'Partial', 'Full'],
+                'headerValues':['Tenant','Inc', 'Partial', 'Full'],
                 'cellClasses':['multiline', 'multiline', 'multiline', 'multiline'],
                 'noData':'No syncs',
             },
             'expiringdomains':{'label':'Expiring Domains', 'visible':'yes', 
                 'type':'simplegrid', 'num_cols':3,
-                'headerValues':['Business','Domain','Expiry'],
+                'headerValues':['Tenant','Domain','Expiry'],
                 'cellClasses':['multiline', 'multiline', 'multiline'],
             },
             'mail':{'label':'Mail Stats', 'visible':'yes', 'type':'simplegrid', 'num_cols':6,
-                'headerValues':['Business','Pending','Queued','QFail', 'Sending','Failed'],
+                'headerValues':['Tenant','Pending','Queued','QFail', 'Sending','Failed'],
                 'cellClasses':['','',''],
                 'dataMaps':[0,7,10,15,20,50],
                 'noData':'No mail found',
@@ -64,7 +64,7 @@ function ciniki_sysadmin_bigboard() {
         this.main.tab_sections.syncs = {
             'tabs':this.main.tabs,
             'syncs':{'label':'', 'type':'simplegrid', 'num_cols':5,
-                'headerValues':['Business','Type', 'Inc', 'Partial', 'Full'],
+                'headerValues':['Tenant','Type', 'Inc', 'Partial', 'Full'],
                 'cellClasses':['multiline', 'multiline', 'multiline', 'multiline', 'multiline'],
                 'noData':'No syncs',
             },
@@ -94,7 +94,7 @@ function ciniki_sysadmin_bigboard() {
         this.main.tab_sections.mail = {
             'tabs':this.main.tabs,
             'mail':{'label':'', 'type':'simplegrid', 'num_cols':6,
-                'headerValues':['Business','Pending','Queued','QFail', 'Sending','Failed'],
+                'headerValues':['Tenant','Pending','Queued','QFail', 'Sending','Failed'],
                 'cellClasses':['','',''],
                 'dataMaps':[0,7,10,15,20,50],
                 'noData':'No mail found',
@@ -103,7 +103,7 @@ function ciniki_sysadmin_bigboard() {
         this.main.tab_sections.errors = {
             'tabs':this.main.tabs,
             'errors':{'label':'', 'type':'simplegrid', 'num_cols':3,
-                'headerValues':['Business/User','Method','Date'],
+                'headerValues':['Tenant/User','Method','Date'],
                 'cellClasses':['multiline','multiline','multiline'],
                 'noData':'No errors found',
             },  
@@ -125,8 +125,8 @@ function ciniki_sysadmin_bigboard() {
                 }
             } else if( s == 'expiringdomains' ) {
                 switch(j) {
-                    case 0: return '<span class="maintext">' + d.domain.business_name + '</span>' 
-                        + '<span class="subtext">' + d.domain.business_status + '</span>';
+                    case 0: return '<span class="maintext">' + d.domain.tenant_name + '</span>' 
+                        + '<span class="subtext">' + d.domain.tenant_status + '</span>';
                     case 1: var primary = ''; 
                         var primary = '';
                         if( d.domain.isprimary == 'yes' ) {
@@ -149,14 +149,14 @@ function ciniki_sysadmin_bigboard() {
                 }
             } else if( s == 'problemsyncs' ) {
                 switch(j) {
-                    case 0: return '<span class="maintext">' + d.sync.business_name + '</span><span class="subtext">' + d.sync.remote_name + '</span>';
+                    case 0: return '<span class="maintext">' + d.sync.tenant_name + '</span><span class="subtext">' + d.sync.remote_name + '</span>';
                     case 1: return (d.sync.last_sync!='')?'<span class="maintext">'+d.sync.last_sync.replace(/ ([0-9]+:[0-9]+ ..)/,'</span><span class="subtext">$1')+'</span>':'never';
                     case 2: return (d.sync.last_partial!='')?'<span class="maintext">'+d.sync.last_partial.replace(/ ([0-9]+:[0-9]+ ..)/,'</span><span class="subtext">$1')+'</span>':'never';
                     case 3: return (d.sync.last_full!='')?'<span class="maintext">'+d.sync.last_full.replace(/ ([0-9]+:[0-9]+ ..)/,'</span><span class="subtext">$1')+'</span>':'never';
                 }
             } else if( s == 'syncs' ) {
                 switch(j) {
-                    case 0: return '<span class="maintext">' + d.sync.business_name + '</span><span class="subtext">' + d.sync.remote_name + '</span>';
+                    case 0: return '<span class="maintext">' + d.sync.tenant_name + '</span><span class="subtext">' + d.sync.remote_name + '</span>';
                     case 1: return '<span class="multitext">' + d.sync.type + '</span><span class="subtext">' + d.sync.status_text + '</span>';
                     case 2: return (d.sync.last_sync!='')?'<span class="maintext">'+d.sync.last_sync.replace(/ ([0-9]+:[0-9]+ ..)/,'</span><span class="subtext">$1')+'</span>':'never';
                     case 3: return (d.sync.last_partial!='')?'<span class="maintext">'+d.sync.last_partial.replace(/ ([0-9]+:[0-9]+ ..)/,'</span><span class="subtext">$1')+'</span>':'never';
@@ -181,7 +181,7 @@ function ciniki_sysadmin_bigboard() {
                 }
             } else if( s == 'errors' ) {
                 switch(j) {
-                    case 0: return '<span class=\'maintext\'>' + d.error.business_name + '</span><span class=\'subtext\'>' + d.error.user_name + '</span>';
+                    case 0: return '<span class=\'maintext\'>' + d.error.tenant_name + '</span><span class=\'subtext\'>' + d.error.user_name + '</span>';
                     case 1: return '<span class=\'maintext\'>' + d.error.method + '</span><span class=\'subtext\'>' + d.error.session_key + '</span>';
                     case 2: return '<span class=\'maintext\'>' + d.error.log_date + '</span><span class=\'subtext\'>' + d.error.age + ' ago</span>';
                 }
@@ -256,9 +256,9 @@ function ciniki_sysadmin_bigboard() {
         };
         this.main.rowFn = function(s, i, d) {
             if( s == 'expiringdomains' || s == 'domains' ) {
-                return 'M.startApp(\'ciniki.businesses.domains\',null,\'M.ciniki_sysadmin_bigboard.update();\',\'mc\',{\'domain\':\'' + d.domain.id + '\',\'business\':\'' + d.domain.business_id + '\'});';
+                return 'M.startApp(\'ciniki.tenants.domains\',null,\'M.ciniki_sysadmin_bigboard.update();\',\'mc\',{\'domain\':\'' + d.domain.id + '\',\'tenant\':\'' + d.domain.tnid + '\'});';
             } else if( s == 'problemsyncs' || s == 'syncs' ) {
-                return 'M.startApp(\'ciniki.businesses.sync\',null,\'M.ciniki_sysadmin_bigboard.update();\',\'mc\',{\'sync\':\'' + d.sync.id + '\',\'business\':\'' + d.sync.business_id + '\'});';
+                return 'M.startApp(\'ciniki.tenants.sync\',null,\'M.ciniki_sysadmin_bigboard.update();\',\'mc\',{\'sync\':\'' + d.sync.id + '\',\'tenant\':\'' + d.sync.tnid + '\'});';
             } else if( s == 'activeusers' ) {
                 return 'M.startApp(\'ciniki.sysadmin.user\',null,\'M.ciniki_sysadmin_bigboard.update();\',\'mc\',{\'id\':\'' + d.user.id + '\'});';
             } else if( s == 'bugs' ) {
@@ -336,7 +336,7 @@ function ciniki_sysadmin_bigboard() {
                 p.refreshSection('mail');
             });
             // Get expiring domains
-            M.api.getJSONBgCb('ciniki.businesses.domainExpiries', {}, function(rsp) {
+            M.api.getJSONBgCb('ciniki.tenants.domainExpiries', {}, function(rsp) {
                 if( rsp.stat != 'ok' ) {
                     M.api.err(rsp);
                     return false;
@@ -390,7 +390,7 @@ function ciniki_sysadmin_bigboard() {
                 p.show();
             });
         } else if( this.main.paneltab == 'bugs' ) {
-            var rsp = M.api.getJSONCb('ciniki.bugs.bugList', {'business_id':M.masterBusinessID, 
+            var rsp = M.api.getJSONCb('ciniki.bugs.bugList', {'tnid':M.masterTenantID, 
                 'order':'latestupdated', 'status':'1', 'limit':'25'}, function(rsp) {
                     if( rsp.stat != 'ok' ) {
                         M.api.err(rsp);
@@ -402,7 +402,7 @@ function ciniki_sysadmin_bigboard() {
                     p.sections.tabs.selected = 'bugs';
                     if( this.bugSettings == null ) {
                         var rsp = M.api.getJSONCb('ciniki.bugs.settingsGet', 
-                            {'business_id':M.masterBusinessID}, function(rsp) {
+                            {'tnid':M.masterTenantID}, function(rsp) {
                                 if( rsp.stat != 'ok' ) {
                                     M.api.err(rsp);
                                     return false;

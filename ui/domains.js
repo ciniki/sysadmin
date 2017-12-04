@@ -1,5 +1,5 @@
 //
-// The app to manage businesses domains for a business
+// The app to manage tenants domains for a tenant
 //
 function ciniki_sysadmin_domains() {
     
@@ -19,7 +19,7 @@ function ciniki_sysadmin_domains() {
         this.menu.data = {};
         this.menu.sections = {
             'domains':{'label':'', 'type':'simplegrid', 'num_cols':3,
-                'headerValues':['Business', 'Domain', 'Expiry'],
+                'headerValues':['Tenant', 'Domain', 'Expiry'],
                 'cellClasses':['multiline', 'multiline', 'multiline'],
                 },
         };
@@ -27,7 +27,7 @@ function ciniki_sysadmin_domains() {
         this.menu.sectionData = function(s) { return this.data; }
         this.menu.cellValue = function(s, i, j, d) {
             if( j == 0 ) {
-                return '<span class="maintext">' + d.domain.business_name + '</span><span class="subtext">' + d.domain.business_status + '</span>';
+                return '<span class="maintext">' + d.domain.tenant_name + '</span><span class="subtext">' + d.domain.tenant_status + '</span>';
             }
             if( j == 1 ) {
                 var primary = '';
@@ -60,7 +60,7 @@ function ciniki_sysadmin_domains() {
             return '';
         };
         this.menu.rowFn = function(s, i, d) {
-            return 'M.startApp(\'ciniki.businesses.domains\',null,\'M.ciniki_sysadmin_domains.showMenu();\',\'mc\',{\'domain\':\'' + d.domain.id + '\',\'business\':\'' + d.domain.business_id + '\'});';
+            return 'M.startApp(\'ciniki.tenants.domains\',null,\'M.ciniki_sysadmin_domains.showMenu();\',\'mc\',{\'domain\':\'' + d.domain.id + '\',\'tenant\':\'' + d.domain.tnid + '\'});';
         };
         this.menu.addClose('Back');
     }
@@ -81,8 +81,8 @@ function ciniki_sysadmin_domains() {
             return false;
         } 
 
-        if( args != null && args.business != null && args.business != '' ) {
-            M.curBusinessID = args.business;
+        if( args != null && args.tenant != null && args.tenant != '' ) {
+            M.curTenantID = args.tenant;
         }
 //      if( args != null && args.domain != null && args.domain != '' ) {
 //          this.showDomain(cb, args.domain);
@@ -92,7 +92,7 @@ function ciniki_sysadmin_domains() {
     }
 
     this.showMenu = function(cb) {
-        var rsp = M.api.getJSONCb('ciniki.businesses.domainListAll', {}, function(rsp) {
+        var rsp = M.api.getJSONCb('ciniki.tenants.domainListAll', {}, function(rsp) {
             if( rsp.stat != 'ok' ) {
                 M.api.err(rsp);
                 return false;

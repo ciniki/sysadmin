@@ -32,14 +32,14 @@ $ciniki['session']['user']['id'] = -4;  // Setup to Ciniki Robot
 
 print "Checking Emails\n";
 $strsql = "SELECT "
-    . "ciniki_businesses.name, "
+    . "ciniki_tenants.name, "
     . "ciniki_customers.display_name, "
     . "ciniki_customer_emails.email "
-    . "FROM ciniki_customer_emails, ciniki_customers, ciniki_businesses "
+    . "FROM ciniki_customer_emails, ciniki_customers, ciniki_tenants "
     . "WHERE ciniki_customer_emails.email NOT LIKE '%@%' "
     . "AND ciniki_customer_emails.customer_id = ciniki_customers.id "
-    . "AND ciniki_customers.business_id = ciniki_businesses.id "
-    . "ORDER BY ciniki_businesses.name, ciniki_customers.display_name "
+    . "AND ciniki_customers.tnid = ciniki_tenants.id "
+    . "ORDER BY ciniki_tenants.name, ciniki_customers.display_name "
     . "";
 
 ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQuery');

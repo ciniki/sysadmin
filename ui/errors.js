@@ -9,14 +9,14 @@ function ciniki_sysadmin_errors() {
         this.logs.dataOrder = 'reverse';        // Display the newest logs at the top
         this.logs.sections = { 
             'errors':{'label':'', 'type':'simplegrid', 'num_cols':3,
-                'headerValues':['Business/User','Method','Date'],
+                'headerValues':['Tenant/User','Method','Date'],
                 'cellClasses':['multiline','multiline','multiline'],
             },  
         };  
         this.logs.sectionData = function(s) { return this.data; }
         this.logs.cellValue = function(s, i, j, d) { 
             switch(j) {
-                case 0: return '<span class=\'maintext\'>' + d.error.business_name + '</span><span class=\'subtext\'>' + d.error.user_name + '</span>';
+                case 0: return '<span class=\'maintext\'>' + d.error.tenant_name + '</span><span class=\'subtext\'>' + d.error.user_name + '</span>';
                 case 1: return '<span class=\'maintext\'>' + d.error.method + '</span><span class=\'subtext\'>' + d.error.session_key + '</span>';
                 case 2: return '<span class=\'maintext\'>' + d.error.log_date + '</span><span class=\'subtext\'>' + d.error.age + ' ago</span>';
             }
@@ -44,7 +44,7 @@ function ciniki_sysadmin_errors() {
         this.log.data = null;
         this.log.sections = {
             'info':{'label':'', 'list':{
-                'business_name':{'label':'Business'},
+                'tenant_name':{'label':'Tenant'},
                 'user_name':{'label':'User'},
                 'method':{'label':'Method'},
                 'log_date':{'label':'Date'},

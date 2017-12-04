@@ -1,6 +1,6 @@
 //
-// This class will display the form to allow admins and business owners to 
-// change the details of their business
+// This class will display the form to allow admins and tenant owners to 
+// change the details of their tenant
 //
 function ciniki_sysadmin_main() {
     this.menu = null;
@@ -13,10 +13,10 @@ function ciniki_sysadmin_main() {
             'ciniki_sysadmin_main', 'menu',
             'mc', 'medium narrowaside', 'sectioned', 'ciniki.sysadmin.main.menu');
         this.menu.sections = {
-            'businesses':{'label':'Businesses', 'aside':'yes', 'list':{
-                'add':{'label':'Add Business', 'fn':'M.startApp(\'ciniki.businesses.add\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
-                'owners':{'label':'Owners & Employees', 'fn':'M.startApp(\'ciniki.sysadmin.userbusinesses\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
-                'businesses':{'label':'Businesses', 'fn':'M.startApp(\'ciniki.sysadmin.businessusers\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
+            'tenants':{'label':'Tenants', 'aside':'yes', 'list':{
+                'add':{'label':'Add Tenant', 'fn':'M.startApp(\'ciniki.tenants.add\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
+                'owners':{'label':'Owners & Employees', 'fn':'M.startApp(\'ciniki.sysadmin.usertenants\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
+                'tenants':{'label':'Tenants', 'fn':'M.startApp(\'ciniki.sysadmin.tenantusers\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
                 'billing':{'label':'Billing', 'fn':'M.startApp(\'ciniki.sysadmin.billing\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
                 'syncs':{'label':'Syncronizations', 'fn':'M.startApp(\'ciniki.sysadmin.syncs\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
                 'domains':{'label':'Domains', 'fn':'M.startApp(\'ciniki.sysadmin.domains\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},

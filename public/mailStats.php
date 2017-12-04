@@ -2,13 +2,13 @@
 //
 // Description
 // -----------
-// This method returns the list of labels available for a business and the messages counts were applicable.
+// This method returns the list of labels available for a tenant and the messages counts were applicable.
 //
 // Arguments
 // ---------
 // api_key:
 // auth_token:
-// business_id:         The ID of the business to add the mail mailing to.
+// tnid:         The ID of the tenant to add the mail mailing to.
 //
 // Returns
 // -------
@@ -25,12 +25,12 @@ function ciniki_sysadmin_mailStats(&$ciniki) {
     //
     // Get the mail stats
     //
-    $strsql = "SELECT ciniki_businesses.id, ciniki_businesses.name, "
+    $strsql = "SELECT ciniki_tenants.id, ciniki_tenants.name, "
         . "ciniki_mail.status, COUNT(ciniki_mail.id) AS num_messages "
-        . "FROM ciniki_mail, ciniki_businesses "
+        . "FROM ciniki_mail, ciniki_tenants "
         . "WHERE ciniki_mail.status IN (7, 10, 15, 20, 50) "
-        . "AND ciniki_mail.business_id = ciniki_businesses.id "
-        . "GROUP BY ciniki_mail.business_id, ciniki_mail.status "
+        . "AND ciniki_mail.tnid = ciniki_tenants.id "
+        . "GROUP BY ciniki_mail.tnid, ciniki_mail.status "
         . "";
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryTree');
     $rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'ciniki.mail', array(

@@ -7,7 +7,7 @@ function ciniki_sysadmin_syncs() {
         //
         // Create the panel for the information
         //
-        this.syncs = new M.panel('Business Syncronizations',
+        this.syncs = new M.panel('Tenant Syncronizations',
             'ciniki_sysadmin_syncs', 'syncs',
             'mc', 'large', 'sectioned', 'ciniki.sysadmin.sync.syncs');
         this.syncs.sections = {
@@ -17,7 +17,7 @@ function ciniki_sysadmin_syncs() {
                 'api_key':{'label':'System Key', 'value':M.api.key},    //FIXME: Should be sync api_key, not manage one.
                 }},
             'synclist':{'label':'Syncronizations', 'type':'simplegrid',
-                'headerValues':['Business', 'Type', 'Remote System', 'Inc', 'Partial', 'Full'], 'num_cols':6, 'sortable':'yes',
+                'headerValues':['Tenant', 'Type', 'Remote System', 'Inc', 'Partial', 'Full'], 'num_cols':6, 'sortable':'yes',
                 'cellClasses':['multiline', 'multiline', 'multiline', 'multiline', 'multiline', 'multiline'],
                 'sortTypes':['text','text','text','date','date','date'],
                 'noData':'No current syncronizations',
@@ -28,8 +28,8 @@ function ciniki_sysadmin_syncs() {
         this.syncs.listValue = function(s, i, d) { return d.value; }
         this.syncs.cellValue = function(s, i, j, d) { 
             switch(j) {
-//              case 0: return '<span class="multitext">' + d.sync.business_name + '</span><span class="subtext">' + d.sync.business_uuid + '</span>';
-                case 0: return '<span class="multitext">' + d.sync.business_name + '</span><span class="subtext"></span>';
+//              case 0: return '<span class="multitext">' + d.sync.tenant_name + '</span><span class="subtext">' + d.sync.tenant_uuid + '</span>';
+                case 0: return '<span class="multitext">' + d.sync.tenant_name + '</span><span class="subtext"></span>';
                 case 1: return '<span class="multitext">' + d.sync.type + '</span><span class="subtext">' + d.sync.status_text + '</span>';
 //              case 2: return '<span class="multitext">' + d.sync.remote_name + '</span><span class="subtext">' + d.sync.remote_uuid + '</span>';
                 case 2: return '<span class="multitext">' + d.sync.remote_name + '</span><span class="subtext"></span>';
@@ -76,9 +76,9 @@ function ciniki_sysadmin_syncs() {
     this.showMain = function(cb) {
         this.syncs.sections.synclist.data = null;
         // 
-        // Get the sync information for this server and business
+        // Get the sync information for this server and tenant
         //
-        var rsp = M.api.getJSONCb('ciniki.core.syncInfo', {'business_id':M.curBusinessID}, function(rsp) {
+        var rsp = M.api.getJSONCb('ciniki.core.syncInfo', {'tnid':M.curTenantID}, function(rsp) {
             if( rsp.stat != 'ok' ) {
                 M.api.err(rsp);
                 return false;

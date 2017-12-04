@@ -1,5 +1,5 @@
 //
-// The app to report on module usage by business
+// The app to report on module usage by tenant
 //
 function ciniki_sysadmin_modules() {
     this.init = function() {
@@ -17,12 +17,12 @@ function ciniki_sysadmin_modules() {
         this.main.sectionData = function(s) { return this.data; }
         this.main.cellValue = function(s, i, j, d) {
             if( j == 0 ) {
-                var businesses = '';
-                for(i in d.module.businesses ) {
-                    businesses += d.module.businesses[i].business.name + ', ';
+                var tenants = '';
+                for(i in d.module.tenants ) {
+                    tenants += d.module.tenants[i].tenant.name + ', ';
                 }
-                businesses = businesses.substring(0, businesses.length-2);
-                return '<span class="maintext">' + d.module.name + '</span><span class="subtext">' + businesses + '</span>';
+                tenants = tenants.substring(0, tenants.length-2);
+                return '<span class="maintext">' + d.module.name + '</span><span class="subtext">' + tenants + '</span>';
             }
         }
         this.main.rowFn = function(s, i, d) {
@@ -35,16 +35,16 @@ function ciniki_sysadmin_modules() {
             'mc', 'medium', 'sectioned', 'ciniki.sysadmin.modules.module');
         this.module.data = {};
         this.module.sections = {
-            'businesses':{'label':'', 'type':'simplegrid', 'num_cols':2,
-                'headerValues':['Business', 'Last Change'],
+            'tenants':{'label':'', 'type':'simplegrid', 'num_cols':2,
+                'headerValues':['Tenant', 'Last Change'],
                 'cellClasses':['', ''],
                 'sortable':'yes', 'sortTypes':['text','date'],
                 },
         };
         this.module.cellValue = function(s, i, j, d) {
             switch(j) {
-                case 0: return d.business.name;
-                case 1: return d.business.last_change;
+                case 0: return d.tenant.name;
+                case 1: return d.tenant.last_change;
             }
         };
         this.module.sectionData = function(s) { return this.data[s]; }
@@ -74,7 +74,7 @@ function ciniki_sysadmin_modules() {
         //
         // Load module list
         //
-        var rsp = M.api.getJSONCb('ciniki.businesses.reportModules', {}, function(rsp) {
+        var rsp = M.api.getJSONCb('ciniki.tenants.reportModules', {}, function(rsp) {
             if( rsp.stat != 'ok' ) {
                 M.api.err(rsp);
                 return false;
@@ -88,11 +88,11 @@ function ciniki_sysadmin_modules() {
 
     this.showModule = function(cb, mod) {
         //
-        // Show the details of last change for each business
+        // Show the details of last change for each tenant
         //
         for(i in this.main.data) {
             if( this.main.data[i].module.name == mod ) {    
-                this.module.data.businesses = this.main.data[i].module.businesses;
+                this.module.data.tenants = this.main.data[i].module.tenants;
             }
         }
         this.module.refresh();

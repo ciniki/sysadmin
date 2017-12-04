@@ -25,7 +25,7 @@ function ciniki_sysadmin_user() {
             'resetpassword':{'label':'Reset Password', 'fn':'M.ciniki_sysadmin_user.details.resetPassword();'},
             'setpassword':{'label':'Set Password', 'fn':'M.ciniki_sysadmin_user.details.setPassword();'},
             }},
-        'businesses':{'label':'Businesses', 'type':'simplegrid', 'num_cols':1, 'headerValues':null},
+        'tenants':{'label':'Tenants', 'type':'simplegrid', 'num_cols':1, 'headerValues':null},
         'authlogs':{'label':'Auth Log', 'type':'simplegrid', 'num_cols':2, 'limit_rows':5,
             'headerValues':['User','IP/Session'],
             'cellClasses':['multiline', 'multiline'],
@@ -35,7 +35,7 @@ function ciniki_sysadmin_user() {
         };
     this.details.user_id = 0;
     this.details.sectionData = function(s) {
-        if( s == 'businesses' ) { return this.data.businesses; }
+        if( s == 'tenants' ) { return this.data.tenants; }
         if( s == 'authlogs' ) { return this.data.authlogs; }
         return this.sections[s].list;
     };
@@ -61,14 +61,14 @@ function ciniki_sysadmin_user() {
         return this.data[i];
     };
     this.details.cellValue = function(s, i, j, d) {
-        if( s == 'businesses' ) { return d.business.name; }
+        if( s == 'tenants' ) { return d.tenant.name; }
         if( s == 'authlogs' ) {
             switch(j) {
                 case 0: return '<span class=\'maintext\'>' + d.display_name + '</span><span class=\'subtext\'>' + d.age + '</span>';
                 case 1: return '<span class=\'maintext\'>' + d.ip_address + '</span><span class=\'subtext\'>' + d.session_key + '</span>';
             }
         }
-        // FIXME: add button to remove user from the business
+        // FIXME: add button to remove user from the tenant
     };
     this.details.rowFn = function(s, i, d) {
         if( s == 'authlogs' ) {
@@ -86,7 +86,7 @@ function ciniki_sysadmin_user() {
     };
     this.details.noData = function(s) { 
         if( s == 'authlogs' ) { return 'No auth logs'; }
-        return 'No businesses found'; 
+        return 'No tenants found'; 
     };
     this.details.open = function(cb, id) {
         if( id != null ) { this.user_id = id; }
@@ -182,7 +182,7 @@ function ciniki_sysadmin_user() {
     this.details.delete = function() {
         if( confirm('Are you sure you want to delete ' + this.data.firstname + ' ' + this.data.lastname + '?') == true ) {
             M.api.getJSONCb('ciniki.users.delete', 
-                {'business_id':M.curBusinessID, 'user_id':this.user_id}, function(rsp) {
+                {'tnid':M.curTenantID, 'user_id':this.user_id}, function(rsp) {
                     if( rsp.stat != 'ok' ) {
                         M.api.err(rsp);
                         return false;
@@ -192,7 +192,7 @@ function ciniki_sysadmin_user() {
         }
     }
     this.details.undelete = function() {
-        M.api.getJSONCb('ciniki.users.undelete', {'business_id':M.curBusinessID, 'user_id':this.user_id}, function(rsp) {
+        M.api.getJSONCb('ciniki.users.undelete', {'tnid':M.curTenantID, 'user_id':this.user_id}, function(rsp) {
             if( rsp.stat != 'ok' ) {
                 M.api.err(rsp);
                 return false;
@@ -202,7 +202,7 @@ function ciniki_sysadmin_user() {
     }
     this.details.makeSysAdmin = function() {
         if( confirm('Are you sure you want to make ' + this.data.firstname + ' ' + this.data.lastname + ' a System Admin?') == true ) {
-            M.api.getJSONCb('ciniki.users.makeSysAdmin', {'business_id':M.curBusinessID, 'user_id':this.user_id}, function(rsp) {
+            M.api.getJSONCb('ciniki.users.makeSysAdmin', {'tnid':M.curTenantID, 'user_id':this.user_id}, function(rsp) {
                 if( rsp.stat != 'ok' ) {
                     M.api.err(rsp);
                     return false;
@@ -213,7 +213,7 @@ function ciniki_sysadmin_user() {
     }
     this.details.removeSysAdmin = function() {
         if( confirm('Are you sure you want to remove ' + this.data.firstname + ' ' + this.data.lastname + ' as a System Admin?') == true ) {
-            M.api.getJSONCb('ciniki.users.removeSysAdmin', {'business_id':M.curBusinessID, 'user_id':this.user_id}, function(rsp) {
+            M.api.getJSONCb('ciniki.users.removeSysAdmin', {'tnid':M.curTenantID, 'user_id':this.user_id}, function(rsp) {
                 if( rsp.stat != 'ok' ) {
                     M.api.err(rsp);
                     return false;
