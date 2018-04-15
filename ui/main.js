@@ -17,6 +17,7 @@ function ciniki_sysadmin_main() {
                 'add':{'label':'Add Tenant', 'fn':'M.startApp(\'ciniki.tenants.add\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
                 'owners':{'label':'Owners & Employees', 'fn':'M.startApp(\'ciniki.sysadmin.usertenants\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
                 'tenants':{'label':'Tenants', 'fn':'M.startApp(\'ciniki.sysadmin.tenantusers\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
+                'resellers':{'label':'Resellers', 'fn':'M.startApp(\'ciniki.sysadmin.resellers\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
                 'billing':{'label':'Billing', 'fn':'M.startApp(\'ciniki.sysadmin.billing\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
                 'syncs':{'label':'Syncronizations', 'fn':'M.startApp(\'ciniki.sysadmin.syncs\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
                 'domains':{'label':'Domains', 'fn':'M.startApp(\'ciniki.sysadmin.domains\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
