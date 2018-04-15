@@ -71,7 +71,7 @@ function ciniki_sysadmin_tenantGet($ciniki) {
     //
     // Get the ciniki details
     //
-    $rc = ciniki_core_dbDetailsQuery($ciniki, 'ciniki_tenant_details', 'tnid', $args['tnid'], 'ciniki.tenants', 'details', $detail_key);
+    $rc = ciniki_core_dbDetailsQuery($ciniki, 'ciniki_tenant_details', 'tnid', $args['tnid'], 'ciniki.tenants', 'details', 'ciniki';
     if( $rc['stat'] != 'ok' ) {
         return $rc;
     }
@@ -82,7 +82,7 @@ function ciniki_sysadmin_tenantGet($ciniki) {
     //
     // Get the social details
     //
-    $rc = ciniki_core_dbDetailsQueryDash($ciniki, 'ciniki_tenant_details', 'tnid', $args['tnid'], 'ciniki.tenants', 'details', $detail_key);
+    $rc = ciniki_core_dbDetailsQueryDash($ciniki, 'ciniki_tenant_details', 'tnid', $args['tnid'], 'ciniki.tenants', 'details', 'social');
     if( $rc['stat'] != 'ok' ) {
         return $rc;
     }
