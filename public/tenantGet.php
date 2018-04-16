@@ -71,7 +71,7 @@ function ciniki_sysadmin_tenantGet($ciniki) {
     //
     // Get the ciniki details
     //
-    $rc = ciniki_core_dbDetailsQuery($ciniki, 'ciniki_tenant_details', 'tnid', $args['tnid'], 'ciniki.tenants', 'details', 'ciniki';
+    $rc = ciniki_core_dbDetailsQuery($ciniki, 'ciniki_tenant_details', 'tnid', $args['tnid'], 'ciniki.tenants', 'details', 'ciniki');
     if( $rc['stat'] != 'ok' ) {
         return $rc;
     }
