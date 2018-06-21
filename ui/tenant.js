@@ -75,13 +75,13 @@ function ciniki_sysadmin_tenant() {
 
             p.sections._buttons.buttons = {};
             if( rsp.tenant.tenant_status == 1 ) {
-                p.sections._buttons.buttons._suspend = {'label':'Suspend Tenant', 'fn':'M.ciniki_sysadmin_tenant.suspend();'};
-                p.sections._buttons.buttons._delete = {'label':'Delete Tenant', 'fn':'M.ciniki_sysadmin_tenant.tenantdelete();'};
+                p.sections._buttons.buttons._suspend = {'label':'Suspend Tenant', 'fn':'M.ciniki_sysadmin_tenant.details.suspend();'};
+                p.sections._buttons.buttons._delete = {'label':'Delete Tenant', 'fn':'M.ciniki_sysadmin_tenant.details.tenantdelete();'};
             } else if( rsp.tenant.tenant_status == 50 ) {
-                p.sections._buttons.buttons._suspend = {'label':'Activate Tenant', 'fn':'M.ciniki_sysadmin_tenant.activate();'};
+                p.sections._buttons.buttons._suspend = {'label':'Activate Tenant', 'fn':'M.ciniki_sysadmin_tenant.details.activate();'};
             } else if( rsp.tenant.tenant_status == 60 ) {
-                p.sections._buttons.buttons._undelete = {'label':'Activate Tenant', 'fn':'M.ciniki_sysadmin_tenant.activate();'};
-                p.sections._buttons.buttons._purge = {'label':'Purge Tenant', 'fn':'M.ciniki_sysadmin_tenant.purge();'};
+                p.sections._buttons.buttons._undelete = {'label':'Activate Tenant', 'fn':'M.ciniki_sysadmin_tenant.details.activate();'};
+                p.sections._buttons.buttons._purge = {'label':'Purge Tenant', 'fn':'M.ciniki_sysadmin_tenant.details.purge();'};
             }
 
             p.sections.subscription.list.trial.visible = 'no';
