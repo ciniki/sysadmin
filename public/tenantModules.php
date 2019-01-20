@@ -30,7 +30,7 @@ function ciniki_sysadmin_tenantModules($ciniki) {
     // Sysadmins are allowed full access
     //
     if( ($ciniki['session']['user']['perms'] & 0x01) != 0x01 ) {
-        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.sysadmin.1', 'msg'=>'Access denied'));
+        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.sysadmin.4', 'msg'=>'Access denied'));
     }
 
     ciniki_core_loadMethod($ciniki, 'ciniki', 'users', 'private', 'datetimeFormat');

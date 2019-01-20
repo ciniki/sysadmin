@@ -45,14 +45,15 @@ function ciniki_sysadmin_main() {
                 'sizes':{'label':'Table Sizes', 'fn':'M.startApp(\'ciniki.sysadmin.dbsizes\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
                 'code':{'label':'Code Versions', 'fn':'M.startApp(\'ciniki.sysadmin.codeversions\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
                 'modules':{'label':'Module usage', 'fn':'M.startApp(\'ciniki.sysadmin.modules\',null,\'M.ciniki_sysadmin_main.menu.show();\');'},
+                'upgradeq':{'label':'Upgrade Ciniki', 'fn':'M.ciniki_sysadmin_main.upgradeQ();'},
                 }},
-            'migration':{'label':'Migration', 'list':{
+//            'migration':{'label':'Migration', 'list':{
 //              'infoimport':{'label':'ciniki.info Import', 'fn':'M.ciniki_sysadmin_main.infoimport();'},
 //              'phonesmove':{'label':'Move Phones', 'fn':'M.ciniki_sysadmin_main.phonesmove();'},
 //              'upgradegallery':{'label':'Upgrade Gallery', 'fn':'M.ciniki_sysadmin_main.upgradeGallery();'},
-                'upgradeWebFiles':{'label':'Upgrade Web Files', 'fn':'M.ciniki_sysadmin_main.upgradeWebFiles();'},
-                'upgradeLinks':{'label':'Upgrade Links', 'fn':'M.ciniki_sysadmin_main.upgradeLinks();'},
-                }},
+//                'upgradeWebFiles':{'label':'Upgrade Web Files', 'fn':'M.ciniki_sysadmin_main.upgradeWebFiles();'},
+//                'upgradeLinks':{'label':'Upgrade Links', 'fn':'M.ciniki_sysadmin_main.upgradeLinks();'},
+//                }},
 //          'documentation':{'label':'Documentation', 'list':{
 //              'modules':{'label':'Modules', 'fn':'M.startApp(\'ciniki.documentation.modules\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
 //              'errorcodes':{'label':'Error Codes', 'fn':'M.startApp(\'ciniki.documentation.errorcodes\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
@@ -82,6 +83,16 @@ function ciniki_sysadmin_main() {
     
         this.menu.show(cb);
     }
+
+    this.upgradeQ = function() {
+        M.api.getJSONCb('ciniki.sysadmin.cinikiUpdate', {}, function(rsp) {
+            if( rsp.stat != 'ok' ) {
+                M.api.err(rsp);
+                return false;
+            }
+            alert('done');
+        });
+    };
 
     this.fixuserhistory = function() {
         var rsp = M.api.getJSONCb('ciniki.users.historyFix', {}, function(rsp) {

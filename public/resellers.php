@@ -37,7 +37,7 @@ function ciniki_sysadmin_resellers($ciniki) {
     // Sysadmins are allowed full access
     //
     if( ($ciniki['session']['user']['perms'] & 0x01) != 0x01 ) {
-        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.sysadmin.1', 'msg'=>'Access denied'));
+        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.sysadmin.2', 'msg'=>'Access denied'));
     }
 
     //
@@ -56,7 +56,7 @@ function ciniki_sysadmin_resellers($ciniki) {
         array('container'=>'tenants', 'fname'=>'id', 'fields'=>array('id', 'name', 'num_tenants')),
         ));
     if( $rc['stat'] != 'ok' ) {
-        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.sysadmin.2', 'msg'=>'Unable to load tenants', 'err'=>$rc['err']));
+        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.sysadmin.5', 'msg'=>'Unable to load tenants', 'err'=>$rc['err']));
     }
     if( isset($rc['tenants']) ) {
         $resellers = $rc['tenants'];
@@ -83,7 +83,7 @@ function ciniki_sysadmin_resellers($ciniki) {
         array('container'=>'tenants', 'fname'=>'id', 'fields'=>array('id', 'name')),
         ));
     if( $rc['stat'] != 'ok' ) {
-        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.sysadmin.2', 'msg'=>'Unable to load tenants', 'err'=>$rc['err']));
+        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.sysadmin.6', 'msg'=>'Unable to load tenants', 'err'=>$rc['err']));
     }
     if( isset($rc['tenants']) ) {
         $rsp['tenants'] = $rc['tenants'];

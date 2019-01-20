@@ -59,14 +59,14 @@ function ciniki_sysadmin_tenantUpdate(&$ciniki) {
     // Sysadmins are allowed full access
     //
     if( ($ciniki['session']['user']['perms'] & 0x01) != 0x01 ) {
-        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.sysadmin.1', 'msg'=>'Access denied'));
+        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.sysadmin.9', 'msg'=>'Access denied'));
     }
 
     //
     // Check the sitename is proper format
     //
     if( isset($args['tenant.sitename']) && preg_match('/[^a-z0-9\-_]/', $args['tenant.sitename']) ) {
-        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.tenants.93', 'msg'=>'Illegal characters in sitename.  It can only contain lowercase letters, numbers, underscores (_) or dash (-)'));
+        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.sysadmin.8', 'msg'=>'Illegal characters in sitename.  It can only contain lowercase letters, numbers, underscores (_) or dash (-)'));
     }
     
 
