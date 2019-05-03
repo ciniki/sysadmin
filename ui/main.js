@@ -45,7 +45,7 @@ function ciniki_sysadmin_main() {
                 'sizes':{'label':'Table Sizes', 'fn':'M.startApp(\'ciniki.sysadmin.dbsizes\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
                 'code':{'label':'Code Versions', 'fn':'M.startApp(\'ciniki.sysadmin.codeversions\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
                 'modules':{'label':'Module usage', 'fn':'M.startApp(\'ciniki.sysadmin.modules\',null,\'M.ciniki_sysadmin_main.menu.show();\');'},
-                'upgradeq':{'label':'Upgrade Ciniki', 'fn':'M.ciniki_sysadmin_main.upgradeQ();'},
+                'upgradeq':{'label':'Upgrade Ciniki', 'fn':'M.ciniki_sysadmin_main.upgradeCode();'},
                 }},
 //            'migration':{'label':'Migration', 'list':{
 //              'infoimport':{'label':'ciniki.info Import', 'fn':'M.ciniki_sysadmin_main.infoimport();'},
@@ -84,7 +84,7 @@ function ciniki_sysadmin_main() {
         this.menu.show(cb);
     }
 
-    this.upgradeQ = function() {
+    this.upgradeCode = function() {
         M.api.getJSONCb('ciniki.sysadmin.cinikiUpdate', {}, function(rsp) {
             if( rsp.stat != 'ok' ) {
                 M.api.err(rsp);
