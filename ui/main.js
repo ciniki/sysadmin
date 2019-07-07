@@ -17,14 +17,26 @@ function ciniki_sysadmin_main() {
                 'add':{'label':'Add Tenant', 'fn':'M.startApp(\'ciniki.tenants.add\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
                 'owners':{'label':'Owners & Employees', 'fn':'M.startApp(\'ciniki.sysadmin.usertenants\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
                 'tenants':{'label':'Tenants', 'fn':'M.startApp(\'ciniki.sysadmin.tenantusers\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
-                'resellers':{'label':'Resellers', 'fn':'M.startApp(\'ciniki.sysadmin.resellers\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
-                'billing':{'label':'Billing', 'fn':'M.startApp(\'ciniki.sysadmin.billing\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
-                'syncs':{'label':'Syncronizations', 'fn':'M.startApp(\'ciniki.sysadmin.syncs\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
-                'domains':{'label':'Domains', 'fn':'M.startApp(\'ciniki.sysadmin.domains\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
+                'resellers':{'label':'Resellers', 
+                    'visible':function() { return M.blackbox == null ? 'yes' : 'no'; },
+                    'fn':'M.startApp(\'ciniki.sysadmin.resellers\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
+                'billing':{'label':'Billing', 
+                    'visible':function() { return M.blackbox == null ? 'yes' : 'no'; },
+                    'fn':'M.startApp(\'ciniki.sysadmin.billing\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
+                'syncs':{'label':'Syncronizations', 
+                    'visible':function() { return M.blackbox == null ? 'yes' : 'no'; },
+                    'fn':'M.startApp(\'ciniki.sysadmin.syncs\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
+                'domains':{'label':'Domains', 
+                    'visible':function() { return M.blackbox == null ? 'yes' : 'no'; },
+                    'fn':'M.startApp(\'ciniki.sysadmin.domains\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
                 }},
             'users':{'label':'Users', 'aside':'yes', 'list':{
-                'sysadmins':{'label':'Sys Admins', 'fn':'M.startApp(\'ciniki.sysadmin.users\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
-                'privileged':{'label':'Privileged Users', 'fn':'M.startApp(\'ciniki.sysadmin.privilegedusers\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
+                'sysadmins':{'label':'Sys Admins', 
+                    'visible':function() { return M.blackbox == null ? 'yes' : 'no'; },
+                    'fn':'M.startApp(\'ciniki.sysadmin.users\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
+                'privileged':{'label':'Privileged Users', 
+                    'visible':function() { return M.blackbox == null ? 'yes' : 'no'; },
+                    'fn':'M.startApp(\'ciniki.sysadmin.privilegedusers\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
                 'locked':{'label':'Locked Users', 'fn':'M.startApp(\'ciniki.sysadmin.lockedusers\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
                 'all':{'label':'All Users', 'fn':'M.startApp(\'ciniki.sysadmin.allusers\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
                 }},
@@ -35,7 +47,7 @@ function ciniki_sysadmin_main() {
                 'sessions':{'label':'Sessions', 'fn':'M.startApp(\'ciniki.sysadmin.sessions\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
                 'authlog':{'label':'Auth Log', 'fn':'M.startApp(\'ciniki.sysadmin.authlogs\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
                 'authfailures':{'label':'Auth Failures', 'fn':'M.startApp(\'ciniki.sysadmin.authfailures\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
-                'fixhistory':{'label':'Fix User History', 'fn':'M.ciniki_sysadmin_main.fixuserhistory();'},
+//                'fixhistory':{'label':'Fix User History', 'fn':'M.ciniki_sysadmin_main.fixuserhistory();'},
                 }},
 //          'billing':{'label':'Billing', 'list':{
 //              'plans':{'label':'Plans', 'fn':'M.startApp(\'ciniki.sysadmin.plans\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
@@ -45,7 +57,7 @@ function ciniki_sysadmin_main() {
                 'sizes':{'label':'Table Sizes', 'fn':'M.startApp(\'ciniki.sysadmin.dbsizes\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
                 'code':{'label':'Code Versions', 'fn':'M.startApp(\'ciniki.sysadmin.codeversions\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
                 'modules':{'label':'Module usage', 'fn':'M.startApp(\'ciniki.sysadmin.modules\',null,\'M.ciniki_sysadmin_main.menu.show();\');'},
-                'upgradeq':{'label':'Upgrade Ciniki', 'fn':'M.ciniki_sysadmin_main.upgradeQ();'},
+                'upgradecode':{'label':'Upgrade Code', 'fn':'M.ciniki_sysadmin_main.upgradeCode();'},
                 }},
 //            'migration':{'label':'Migration', 'list':{
 //              'infoimport':{'label':'ciniki.info Import', 'fn':'M.ciniki_sysadmin_main.infoimport();'},
@@ -84,6 +96,15 @@ function ciniki_sysadmin_main() {
         this.menu.show(cb);
     }
 
+    this.upgradeCode = function() {
+        M.api.getJSONCb('ciniki.sysadmin.cinikiUpdateCode', {}, function(rsp) {
+            if( rsp.stat != 'ok' ) {
+                M.api.err(rsp);
+                return false;
+            }
+            alert('done');
+        });
+    };
     this.upgradeQ = function() {
         M.api.getJSONCb('ciniki.sysadmin.cinikiUpdate', {}, function(rsp) {
             if( rsp.stat != 'ok' ) {
