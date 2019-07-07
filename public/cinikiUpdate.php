@@ -28,6 +28,16 @@ function ciniki_sysadmin_cinikiUpdate(&$ciniki) {
         $results = exec($ciniki['config']['ciniki.core']['update.script']); 
         error_log($results);
     }
+    elseif( isset($ciniki['config']['ciniki.core']['sync.code.url']) ) {
+        ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'syncUpgradeSystem');
+        $rc = ciniki_core_syncUpgradeSystem($ciniki);
+        if( $rc['stat'] != 'ok' ) {
+            return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.sysadmin.11', 'msg'=>'Unable to upgrade system', 'err'=>$rc['err']));
+        }
+    }
+    else {
+        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.sysadmin.7', 'msg'=>'No upgrade ability configured', 'err'=>$rc['err']));
+    }
 
     return array('stat'=>'ok');
 }
