@@ -23,12 +23,10 @@ function ciniki_sysadmin_domainListAll($ciniki) {
     $args = $rc['args'];
 
     //
-    // Check access to tnid as owner
+    // Sysadmins are allowed full access
     //
-    ciniki_core_loadMethod($ciniki, 'ciniki', 'sysadmin', 'private', 'checkAccess');
-    $ac = ciniki_sysadmin_checkAccess($ciniki, 0, 'ciniki.sysadmin.domainListAll');
-    if( $ac['stat'] != 'ok' ) {
-        return $ac;
+    if( ($ciniki['session']['user']['perms'] & 0x01) != 0x01 ) {
+        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.sysadmin.10', 'msg'=>'Access denied'));
     }
 
     ciniki_core_loadMethod($ciniki, 'ciniki', 'users', 'private', 'dateFormat');
