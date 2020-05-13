@@ -40,6 +40,7 @@ function ciniki_sysadmin_billing() {
             return '';
         };
         this.tenants.rowFn = function(s, i, d) { 
+            if( d == null ) { return ''; }
             return 'M.startApp(\'ciniki.tenants.billing\',null,\'M.ciniki_sysadmin_billing.showTenants();\',\'mc\',{\'tnid\':\'' + d.tenant.id + '\'});'; 
         };
         this.tenants.noData = function() { return 'ERROR - No sysadmins'; }
