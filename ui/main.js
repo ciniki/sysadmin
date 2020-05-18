@@ -171,7 +171,7 @@ function ciniki_sysadmin_main() {
 //              M.api.err(rsp);
 //              return false;
 //          }
-//          alert('done');
+//          M.alert('done');
 //      });
 //  };
 
@@ -181,7 +181,7 @@ function ciniki_sysadmin_main() {
 //              M.api.err(rsp);
 //              return false;
 //          }
-//          alert('done');
+//          M.alert('done');
 //      });
 //  };
 
@@ -191,7 +191,7 @@ function ciniki_sysadmin_main() {
 //              M.api.err(rsp);
 //              return false;
 //          }
-//          alert('done');
+//          M.alert('done');
 //      });
 //  };
 }
