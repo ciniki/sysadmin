@@ -58,7 +58,7 @@ function ciniki_sysadmin_dbversions() {
     this.dbtables.upgrade = function() {
         M.api.getJSONCb('ciniki.core.upgradeDb', {}, function(rsp) {
             if( rsp.stat != 'ok' ) {
-                alert("Error: #" + rsp.err.code + ' - ' + rsp.err.msg);
+                M.alert("Error: #" + rsp.err.code + ' - ' + rsp.err.msg);
                 return false;
             }
             M.ciniki_sysadmin_dbversions.dbtables.open();
@@ -74,7 +74,7 @@ function ciniki_sysadmin_dbversions() {
         //
         var appContainer = M.createContainer(appPrefix, 'ciniki_sysadmin_dbversions', 'yes');
         if( appContainer == null ) {
-            alert('App Error');
+            M.alert('App Error');
             return false;
         } 
 

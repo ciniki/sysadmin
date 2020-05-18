@@ -41,7 +41,7 @@ function ciniki_sysadmin_dbsizes() {
         //
         var appContainer = M.createContainer(appPrefix, 'ciniki_sysadmin_dbsizes', 'yes');
         if( appContainer == null ) {
-            alert('App Error');
+            M.alert('App Error');
             return false;
         } 
 

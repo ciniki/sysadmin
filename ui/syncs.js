@@ -66,7 +66,7 @@ function ciniki_sysadmin_syncs() {
         //
         var appContainer = M.createContainer(appPrefix, 'ciniki_sysadmin_syncs', 'yes');
         if( appContainer == null ) {
-            alert('App Error');
+            M.alert('App Error');
             return false;
         } 
 

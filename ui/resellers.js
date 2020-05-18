@@ -82,7 +82,7 @@ function ciniki_sysadmin_resellers() {
         //  
         var appContainer = M.createContainer(appPrefix, 'ciniki_sysadmin_resellers', 'yes');
         if( appContainer == null ) { 
-            alert('App Error');
+            M.alert('App Error');
             return false;
         }
 

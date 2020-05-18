@@ -40,7 +40,7 @@ function ciniki_sysadmin_users() {
         //
         var appContainer = M.createContainer(appPrefix, 'ciniki_sysadmin_users', 'yes');
         if( appContainer == null ) {
-            alert('App Error');
+            M.alert('App Error');
             return false;
         } 
 

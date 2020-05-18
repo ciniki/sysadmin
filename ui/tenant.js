@@ -94,26 +94,26 @@ function ciniki_sysadmin_tenant() {
         });
     }
     this.details.suspend = function() {
-        if( confirm("Are you sure you want to suspend the tenant?") ) {
-            M.api.getJSONCb('ciniki.tenants.suspend', {'id':this.tnid}, function(rsp) {
+        M.confirm("Are you sure you want to suspend the tenant?",null,function() {
+            M.api.getJSONCb('ciniki.tenants.suspend', {'id':M.ciniki_sysadmin_tenant.details.tnid}, function(rsp) {
                 if( rsp.stat != 'ok' ) {
                     M.api.err(rsp); 
                     return false;
                 }
                 M.ciniki_sysadmin_tenant.details.open();
             });
-        }
+        });
     }
     this.details.tenantdelete = function() {
-        if( confirm('Are you sure you want to delete this tenant?  No information will be removed from the database.') == true ) {
-            M.api.getJSONCb('ciniki.tenants.delete', {'id':this.tnid}, function(rsp) {
+        M.confirm('Are you sure you want to delete this tenant?  No information will be removed from the database.',null,function() {
+            M.api.getJSONCb('ciniki.tenants.delete', {'id':M.ciniki_sysadmin_tenant.details.tnid}, function(rsp) {
                 if( rsp.stat != 'ok' ) {
                     M.api.err(rsp); 
                     return false;
                 }
                 M.ciniki_sysadmin_tenant.details.open();
             });
-        }
+        });
     }
     this.details.activate = function() {
         M.api.getJSONCb('ciniki.tenants.activate', {'id':this.tnid}, function(rsp) {
@@ -125,17 +125,17 @@ function ciniki_sysadmin_tenant() {
         });
     }
     this.details.purge = function() {
-        if( confirm('Are you sure you want to purge this tenant?  All information will be removed!') == true ) {
-            if( confirm('Please confirm deletion') ) {
-                M.api.getJSONCb('ciniki.tenants.purge', {'tnid':this.tnid}, function(rsp) {
+        M.confirm('Are you sure you want to purge this tenant?  All information will be removed!',null,function() {
+            M.confirm('Please confirm deletion',null,function() {
+                M.api.getJSONCb('ciniki.tenants.purge', {'tnid':M.ciniki_sysadmin_tenant.details.tnid}, function(rsp) {
                     if( rsp.stat != 'ok' ) {
                         M.api.err(rsp); 
                         return false;
                     }
                     M.ciniki_sysadmin_tenant.details.close();
                 });
-            }
-        }
+            });
+        });
     }
     this.details.addButton('edit', 'Edit', 'M.ciniki_sysadmin_tenant.edit.open(\'M.ciniki_sysadmin_tenant.details.open();\',M.ciniki_sysadmin_tenant.details.tnid);');
     this.details.addClose('Back');
@@ -242,7 +242,7 @@ function ciniki_sysadmin_tenant() {
         //  
         var appContainer = M.createContainer(appPrefix, 'ciniki_sysadmin_tenant', 'yes');
         if( appContainer == null ) { 
-            alert('App Error');
+            M.alert('App Error');
             return false;
         }
 

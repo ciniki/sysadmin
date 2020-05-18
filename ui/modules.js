@@ -82,7 +82,7 @@ function ciniki_sysadmin_modules() {
         //
         var appContainer = M.createContainer(ap, 'ciniki_sysadmin_modules', 'yes');
         if( appContainer == null ) {
-            alert('App Error');
+            M.alert('App Error');
             return false;
         } 
 

@@ -15,7 +15,7 @@ function ciniki_sysadmin_authlogs() {
         //
         var appContainer = M.createContainer(appPrefix, 'ciniki_sysadmin_authlogs', 'yes');
         if( appContainer == null ) {
-            alert('App Error');
+            M.alert('App Error');
             return false;
         } 
 

@@ -43,7 +43,7 @@ function ciniki_sysadmin_usertenants() {
         //  
         var appContainer = M.createContainer(appPrefix, 'ciniki_sysadmin_usertenants', 'yes');
         if( appContainer == null ) { 
-            alert('App Error');
+            M.alert('App Error');
             return false;
         }   
 

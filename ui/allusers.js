@@ -81,7 +81,7 @@ function ciniki_sysadmin_allusers() {
         //  
         var appContainer = M.createContainer(appPrefix, 'ciniki_sysadmin_allusers', 'yes');
         if( appContainer == null ) { 
-            alert('App Error');
+            M.alert('App Error');
             return false;
         }
 

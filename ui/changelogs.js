@@ -15,7 +15,7 @@ function ciniki_sysadmin_changelogs() {
         //
         var appContainer = M.createContainer(appPrefix, 'ciniki_sysadmin_changelogs', 'yes');
         if( appContainer == null ) {
-            alert('App Error');
+            M.alert('App Error');
             return false;
         } 
 

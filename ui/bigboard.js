@@ -17,7 +17,7 @@ function ciniki_sysadmin_bigboard() {
         //
         var appContainer = M.createContainer(appPrefix, 'ciniki_sysadmin_bigboard', 'yes');
         if( appContainer == null ) {
-            alert('App Error');
+            M.alert('App Error');
             return false;
         } 
 
@@ -443,7 +443,7 @@ function ciniki_sysadmin_bigboard() {
                 p.show();
             });
         } else {
-            alert('Invalid panel tab');
+            M.alert('Invalid panel tab');
             return false;
         }
     }

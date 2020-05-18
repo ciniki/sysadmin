@@ -15,7 +15,7 @@ function ciniki_sysadmin_sessions() {
         //
         var appContainer = M.createContainer(appPrefix, 'ciniki_sysadmin_sessions', 'yes');
         if( appContainer == null ) {
-            alert('App Error');
+            M.alert('App Error');
             return false;
         } 
 

@@ -41,7 +41,7 @@ function ciniki_sysadmin_privilegedusers() {
         //  
         var appContainer = M.createContainer(appPrefix, 'ciniki_sysadmin_privilegedusers', 'yes');
         if( appContainer == null ) { 
-            alert('App Error');
+            M.alert('App Error');
             return false;
         }   
     

@@ -132,15 +132,15 @@ function ciniki_sysadmin_user() {
         });
     }
     this.details.resetPassword = function() {
-        if( confirm("Are you sure you want to reset their password?") ) {
-            M.api.getJSONCb('ciniki.users.resetPassword', {'user_id':this.user_id}, function(rsp) {
+        M.confirm("Are you sure you want to reset their password?",null,function() {
+            M.api.getJSONCb('ciniki.users.resetPassword', {'user_id':M.ciniki_sysadmin_user.details.user_id}, function(rsp) {
                 if( rsp.stat != 'ok' ) {
                     M.api.err(rsp); 
                     return false;
                 }
-                alert("Their password has been reset and emailed to them.");
+                M.alert("Their password has been reset and emailed to them.");
             });
-        }
+        });
     }
     this.details.setPassword = function() {
         var newpassword = prompt("New password:", "");
@@ -151,10 +151,10 @@ function ciniki_sysadmin_user() {
                         M.api.err(rsp);
                         return false;
                     }
-                    alert('Password set');
+                    M.alert('Password set');
                 });
         } else {
-            alert('No password specified, nothing changed');
+            M.alert('No password specified, nothing changed');
         }
     }
     this.details.lock = function() {
@@ -180,16 +180,16 @@ function ciniki_sysadmin_user() {
         }
     }
     this.details.delete = function() {
-        if( confirm('Are you sure you want to delete ' + this.data.firstname + ' ' + this.data.lastname + '?') == true ) {
+        M.confirm('Are you sure you want to delete ' + this.data.firstname + ' ' + this.data.lastname + '?',null,function() {
             M.api.getJSONCb('ciniki.users.delete', 
-                {'tnid':M.curTenantID, 'user_id':this.user_id}, function(rsp) {
+                {'tnid':M.curTenantID, 'user_id':M.ciniki_sysadmin_user.details.user_id}, function(rsp) {
                     if( rsp.stat != 'ok' ) {
                         M.api.err(rsp);
                         return false;
                     }
                     M.ciniki_sysadmin_user.details.open();
                 });
-        }
+        });
     }
     this.details.undelete = function() {
         M.api.getJSONCb('ciniki.users.undelete', {'tnid':M.curTenantID, 'user_id':this.user_id}, function(rsp) {
@@ -201,26 +201,26 @@ function ciniki_sysadmin_user() {
         });
     }
     this.details.makeSysAdmin = function() {
-        if( confirm('Are you sure you want to make ' + this.data.firstname + ' ' + this.data.lastname + ' a System Admin?') == true ) {
-            M.api.getJSONCb('ciniki.users.makeSysAdmin', {'tnid':M.curTenantID, 'user_id':this.user_id}, function(rsp) {
+        M.confirm('Are you sure you want to make ' + this.data.firstname + ' ' + this.data.lastname + ' a System Admin?',null,function() {
+            M.api.getJSONCb('ciniki.users.makeSysAdmin', {'tnid':M.curTenantID, 'user_id':M.ciniki_sysadmin_user.details.user_id}, function(rsp) {
                 if( rsp.stat != 'ok' ) {
                     M.api.err(rsp);
                     return false;
                 }
                 M.ciniki_sysadmin_user.details.open();
             });
-        }
+        });
     }
     this.details.removeSysAdmin = function() {
-        if( confirm('Are you sure you want to remove ' + this.data.firstname + ' ' + this.data.lastname + ' as a System Admin?') == true ) {
-            M.api.getJSONCb('ciniki.users.removeSysAdmin', {'tnid':M.curTenantID, 'user_id':this.user_id}, function(rsp) {
+        M.confirm('Are you sure you want to remove ' + this.data.firstname + ' ' + this.data.lastname + ' as a System Admin?',null,function() {
+            M.api.getJSONCb('ciniki.users.removeSysAdmin', {'tnid':M.curTenantID, 'user_id':M.ciniki_sysadmin_user.details.user_id}, function(rsp) {
                 if( rsp.stat != 'ok' ) {
                     M.api.err(rsp);
                     return false;
                 }
                 M.ciniki_sysadmin_user.details.open();
             });
-        }
+        });
     }
     this.details.addButton('edit', 'Edit', 'M.ciniki_sysadmin_user.edit.open(\'M.ciniki_sysadmin_user.details.open();\', M.ciniki_sysadmin_user.details.user_id);');
     this.details.addClose('Back');
@@ -369,7 +369,7 @@ function ciniki_sysadmin_user() {
         //  
         var appContainer = M.createContainer(appPrefix, 'ciniki_sysadmin_user', 'yes');
         if( appContainer == null ) { 
-            alert('App Error');
+            M.alert('App Error');
             return false;
         }   
 

@@ -90,7 +90,7 @@ function ciniki_sysadmin_main() {
         //
         var appContainer = M.createContainer('mc', 'ciniki_sysadmin_main', 'yes');
         if( appContainer == null ) {
-            alert('App Error');
+            M.alert('App Error');
             return false;
         } 
     
@@ -103,7 +103,7 @@ function ciniki_sysadmin_main() {
                 M.api.err(rsp);
                 return false;
             }
-            alert('done');
+            M.alert('done');
         });
     };
     this.upgradeQ = function() {
@@ -112,7 +112,7 @@ function ciniki_sysadmin_main() {
                 M.api.err(rsp);
                 return false;
             }
-            alert('done');
+            M.alert('done');
         });
     };
 
@@ -122,7 +122,7 @@ function ciniki_sysadmin_main() {
                 M.api.err(rsp);
                 return false;
             }
-            alert('done');
+            M.alert('done');
         });
     };
 
@@ -132,7 +132,7 @@ function ciniki_sysadmin_main() {
                 M.api.err(rsp);
                 return false;
             }
-            alert('done');
+            M.alert('done');
         });
     };
 
@@ -142,7 +142,7 @@ function ciniki_sysadmin_main() {
                 M.api.err(rsp);
                 return false;
             }
-            alert('done, added ' + rsp.added + ' tags');
+            M.alert('done, added ' + rsp.added + ' tags');
         });
     };
 
@@ -152,7 +152,7 @@ function ciniki_sysadmin_main() {
                 M.api.err(rsp);
                 return false;
             }
-            alert('done');
+            M.alert('done');
         });
     };
     this.upgradeWebFiles = function() {
@@ -161,7 +161,7 @@ function ciniki_sysadmin_main() {
                 M.api.err(rsp);
                 return false;
             }
-            alert('done');
+            M.alert('done');
         });
     };
 
