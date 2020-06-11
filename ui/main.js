@@ -57,6 +57,7 @@ function ciniki_sysadmin_main() {
                 'sizes':{'label':'Table Sizes', 'fn':'M.startApp(\'ciniki.sysadmin.dbsizes\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
                 'code':{'label':'Code Versions', 'fn':'M.startApp(\'ciniki.sysadmin.codeversions\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
                 'modules':{'label':'Module usage', 'fn':'M.startApp(\'ciniki.sysadmin.modules\',null,\'M.ciniki_sysadmin_main.menu.show();\');'},
+                'modflags':{'label':'Module Option Usage', 'fn':'M.startApp(\'ciniki.sysadmin.modflags\',null,\'M.ciniki_sysadmin_main.menu.show();\');'},
                 'upgradecode':{'label':'Upgrade Code', 'fn':'M.ciniki_sysadmin_main.upgradeCode();'},
                 }},
             'migration':{'label':'Migration', 'list':{

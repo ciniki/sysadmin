@@ -64,8 +64,8 @@ function ciniki_sysadmin_modules() {
                 M.ciniki_sysadmin_modules.module.data.tenants = M.ciniki_sysadmin_modules.main.data[i].module.tenants;
             }
         }
-        this.module.refresh();
-        this.module.show(cb);
+        this.refresh();
+        this.show(cb);
     };
     this.module.sectionData = function(s) { return this.data[s]; }
     this.module.addClose('Back');

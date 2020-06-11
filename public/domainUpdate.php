@@ -35,7 +35,7 @@ function ciniki_sysadmin_domainUpdate($ciniki) {
     // Sysadmins are allowed full access
     //
     if( ($ciniki['session']['user']['perms'] & 0x01) != 0x01 ) {
-        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.sysadmin.10', 'msg'=>'Access denied'));
+        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.sysadmin.20', 'msg'=>'Access denied'));
     }
 
     //  
