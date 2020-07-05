@@ -98,7 +98,9 @@ function ciniki_sysadmin_moduleUsage(&$ciniki) {
                 . "modules.tnid = tenants.id "
                 . ") "
             . "WHERE modules.package = '" . ciniki_core_dbQuote($ciniki, $args['package']) . "' "
-            . "AND modules.module = '" . ciniki_core_dbQuote($ciniki, $args['module']) . "' ";
+            . "AND modules.module = '" . ciniki_core_dbQuote($ciniki, $args['module']) . "' "
+            . "AND modules.status > 0 "
+            . "";
         if( isset($args['flags']) && $args['flags'] != '' && $args['flags'] > 0 ) {
             $flags = intval($args['flags']);
             $strsql .= "AND (modules.flags&$flags) = $flags ";
