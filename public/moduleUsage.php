@@ -27,10 +27,10 @@ function ciniki_sysadmin_moduleUsage(&$ciniki) {
         return $rc;
     }
     $args = $rc['args'];
-    if( $args['package'] == 'null' ) {
+    if( isset($args['package']) && $args['package'] == 'null' ) {
         $args['package'] = '';
     }
-    if( $args['module'] == 'null' ) {
+    if( isset($args['module']) && $args['module'] == 'null' ) {
         $args['module'] = '';
     }
 
