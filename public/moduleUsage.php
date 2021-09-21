@@ -105,7 +105,7 @@ function ciniki_sysadmin_moduleUsage(&$ciniki) {
             $flags = intval($args['flags']);
             $strsql .= "AND (modules.flags&$flags) = $flags ";
         }
-        $strsql .= "ORDER BY tenants.name "
+        $strsql .= "ORDER BY modules.status, tenants.name "
             . "";
         ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryArrayTree');
         $rc = ciniki_core_dbHashQueryArrayTree($ciniki, $strsql, 'ciniki.sysadmin', array(
