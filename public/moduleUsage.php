@@ -92,7 +92,7 @@ function ciniki_sysadmin_moduleUsage(&$ciniki) {
         //
         // Query for the tenants and they modules enabled
         //
-        $strsql = "SELECT tenants.id, tenants.name, modules.flags, modules.flags AS flag_text, modules.status "
+        $strsql = "SELECT tenants.id, tenants.name, modules.flags, modules.flags AS flag_text, modules.status, modules.status AS status_text "
             . "FROM ciniki_tenant_modules AS modules "
             . "LEFT JOIN ciniki_tenants AS tenants ON ("
                 . "modules.tnid = tenants.id "
@@ -110,7 +110,8 @@ function ciniki_sysadmin_moduleUsage(&$ciniki) {
         ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryArrayTree');
         $rc = ciniki_core_dbHashQueryArrayTree($ciniki, $strsql, 'ciniki.sysadmin', array(
             array('container'=>'tenants', 'fname'=>'id', 
-                'fields'=>array('id', 'name', 'flags', 'flag_text', 'status'),
+                'fields'=>array('id', 'name', 'flags', 'flag_text', 'status_text', 'status'),
+                'maps'=>array('status_text'=>array('0'=>'Inactive', '1'=>'Active', '90'=>'Archived')),
                 'flags'=>array('flag_text'=>$flag_text),
                 ),
             ));

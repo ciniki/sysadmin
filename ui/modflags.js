@@ -27,7 +27,7 @@ function ciniki_sysadmin_modflags() {
             'active':function() { return M.ciniki_sysadmin_modflags.main.data.module != '' ? 'yes' : 'no'; },
             'fields': {
             }},
-        'tenants':{'label':'Tenants', 'type':'simplegrid', 'num_cols':1,
+        'tenants':{'label':'Tenants', 'type':'simplegrid', 'num_cols':2,
             'visible':function() { return M.ciniki_sysadmin_modflags.main.data.module != '' ? 'yes' : 'hidden'; },
             'cellClasses':['multiline'],
             },
@@ -38,8 +38,9 @@ function ciniki_sysadmin_modflags() {
             return d.package + '.' + d.name;
         }
         if( s == 'tenants' ) {
-            if( j == 0 ) { 
-                return M.multiline(d.name, d.flag_text);
+            switch(j) {
+                case 0: return M.multiline(d.name, d.flag_text);
+                case 1: return d.status_text;
             }
         }
     }
