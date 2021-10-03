@@ -53,11 +53,27 @@ while(($tltr = readdir($tldir)) !== false ) {
         $fname = $ciniki['config']['ciniki.core']['storage_dir'] . '/' . $tltr;
         $tdir = opendir($fname);
         while(($tenant = readdir($tdir)) !== false ) {
-            if( $tenant == '.' || $tenant == '..' ) {
+            if( $tenant == '.' || $tenant == '..' || $tenant == '0' ) {
                 continue;
             }
             if( !isset($tenants[$tenant]) ) {
-                print("Orphaned Tenant: " . $tenant . "\n");
+                print("sudo rm -rf " . $fname . '/' . $tenant . "\n");
+            }
+        }
+    }
+}
+
+$tldir = opendir($ciniki['config']['ciniki.core']['cache_dir']);
+while(($tltr = readdir($tldir)) !== false ) {
+    if( preg_match("/^[0-9a-f]$/", $tltr) ) {
+        $fname = $ciniki['config']['ciniki.core']['cache_dir'] . '/' . $tltr;
+        $tdir = opendir($fname);
+        while(($tenant = readdir($tdir)) !== false ) {
+            if( $tenant == '.' || $tenant == '..' || $tenant == '0' ) {
+                continue;
+            }
+            if( !isset($tenants[$tenant]) ) {
+                print("sudo rm -rf " . $fname . '/' . $tenant . "\n");
             }
         }
     }
