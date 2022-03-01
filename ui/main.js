@@ -64,7 +64,7 @@ function ciniki_sysadmin_main() {
 //              'infoimport':{'label':'ciniki.info Import', 'fn':'M.ciniki_sysadmin_main.infoimport();'},
 //              'phonesmove':{'label':'Move Phones', 'fn':'M.ciniki_sysadmin_main.phonesmove();'},
 //              'upgradegallery':{'label':'Upgrade Gallery', 'fn':'M.ciniki_sysadmin_main.upgradeGallery();'},
-                'upgradeMembersonlyFiles':{'label':'Upgrade Membersonly Files', 'fn':'M.ciniki_sysadmin_main.upgradeMembersonlyFiles();'},
+//                'upgradeMembersonlyFiles':{'label':'Upgrade Membersonly Files', 'fn':'M.ciniki_sysadmin_main.upgradeMembersonlyFiles();'},
 //                'upgradeWebFiles':{'label':'Upgrade Web Files', 'fn':'M.ciniki_sysadmin_main.upgradeWebFiles();'},
 //                'upgradeLinks':{'label':'Upgrade Links', 'fn':'M.ciniki_sysadmin_main.upgradeLinks();'},
                 }},
