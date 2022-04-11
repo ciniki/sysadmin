@@ -4,7 +4,7 @@
 function ciniki_sysadmin_modflags() {
     this.main = new M.panel('Module Usage',
         'ciniki_sysadmin_modflags', 'main',
-        'mc', 'medium narrowaside', 'sectioned', 'ciniki.sysadmin.modflags.main');
+        'mc', 'medium mediumaside', 'sectioned', 'ciniki.sysadmin.modflags.main');
     this.main.data = {'package':'', 'module':'', 'flags':0};
     this.main.package_selected = '';
     this.main.module_selected = '';
