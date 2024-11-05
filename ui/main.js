@@ -40,6 +40,9 @@ function ciniki_sysadmin_main() {
                 'locked':{'label':'Locked Users', 'fn':'M.startApp(\'ciniki.sysadmin.lockedusers\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
                 'all':{'label':'All Users', 'fn':'M.startApp(\'ciniki.sysadmin.allusers\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
                 }},
+            'modules':{'label':'Modules', 'list':{
+                'musicfestivals':{'label':'Music Festivals', 'fn':'M.startApp(\'ciniki.musicfestivals.status\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
+                }},
             'monitoring':{'label':'Monitoring', 'list':{
                 'errorlogs':{'label':'Error Logs', 'fn':'M.startApp(\'ciniki.sysadmin.errors\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
                 'changelogs':{'label':'Change Logs', 'fn':'M.startApp(\'ciniki.sysadmin.changelogs\', null, \'M.ciniki_sysadmin_main.menu.show();\');'},
